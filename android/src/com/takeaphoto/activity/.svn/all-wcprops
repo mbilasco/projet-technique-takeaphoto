@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/92/trunk/src/com/takeaphoto/activity
+END
+CreateAccountActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/92/trunk/src/com/takeaphoto/activity/CreateAccountActivity.java
+END
+MainActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/85/trunk/src/com/takeaphoto/activity/MainActivity.java
+END
+CustomViewPager.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/80/trunk/src/com/takeaphoto/activity/CustomViewPager.java
+END
+LoginActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/92/trunk/src/com/takeaphoto/activity/LoginActivity.java
+END
+MapAdd.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/80/trunk/src/com/takeaphoto/activity/MapAdd.java
+END
+ManagerActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/85/trunk/src/com/takeaphoto/activity/ManagerActivity.java
+END
+Login.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/80/trunk/src/com/takeaphoto/activity/Login.java
+END
+MapReponse.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/80/trunk/src/com/takeaphoto/activity/MapReponse.java
+END
