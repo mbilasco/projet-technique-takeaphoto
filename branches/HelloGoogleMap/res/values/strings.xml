@@ -1,9 +1,0 @@
-<resources>
-
-    <string name="app_name">HelloGoogleMap</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_hello_google_map">HelloGoogleMapActivity</string>
-    <string name="mapKey">0veDtSa79HFiEYyNaiHdepSZERLnivphBLG51Zw</string>
-
-</resources>
