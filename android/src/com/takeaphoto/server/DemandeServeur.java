@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 import android.content.Context;
 
-import com.takeaphoto.database.DemandeBDD;
+import com.takeaphoto.database.DemandesBDD;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 
 public class DemandeServeur extends Serveur{
-	static DemandeBDD demandeBdd = null ;
+	static DemandesBDD demandeBdd = null ;
 	
 	private void demandeBddIsSet(Context context){
 		if(demandeBdd == null)
-			demandeBdd = new DemandeBDD(context) ;
+			demandeBdd = new DemandesBDD(context) ;
 	}
 	
 	public String addDemande(Context context, User currentUser, Demande demande) {
@@ -57,7 +57,7 @@ public class DemandeServeur extends Serveur{
 		demandeBddIsSet(context) ;
 		
 		demandeBdd.open();
-		demande = demandeBdd.getDemandeWithId(id_demande) ;
+		demande = demandeBdd.getDemandeWithId(id_demande).get(0);
 		demandeBdd.close() ;
 		
 		return demande ;
@@ -68,7 +68,7 @@ public class DemandeServeur extends Serveur{
 		ArrayList<Demande> resultTmp = null ;
 		
 		demandeBdd.open() ;
-        resultTmp = demandeBdd.getDemandeWithIdUser(currentUser.getId()) ;
+        resultTmp = demandeBdd.getDemandeWithId(currentUser.getId()) ;
         demandeBdd.close() ;
 		
 		return resultTmp ;
@@ -79,7 +79,7 @@ public class DemandeServeur extends Serveur{
 		ArrayList<Demande> resultTmp = new ArrayList<Demande>() ;
 		
 		demandeBdd.open() ;
-        demandeBdd.removeDemandeWithoutIdUser(currentUser.getId()) ; 
+        demandeBdd.removeDemandeWithID(currentUser.getId()) ; 
         demandeBdd.close() ;
         ArrayList<String> args = new ArrayList<String>() ;
         args.add("get_demandes_except_user.php") ;
@@ -96,7 +96,7 @@ public class DemandeServeur extends Serveur{
 	    	}
     	}else{
     		demandeBdd.open() ;
-    		resultTmp = demandeBdd.getDemandeWithoutId(currentUser.getId()) ; 
+    		resultTmp = demandeBdd.getDemandeWithId(currentUser.getId()) ; 
     		demandeBdd.close() ;
     	}
 	    	
@@ -124,7 +124,7 @@ public class DemandeServeur extends Serveur{
 				setResultToFalse() ;
 				setRunning(true) ;
 					if(updateDemandeLocal(context, currentUser, id_demande))
-						resultTmp = "Votre demande a ŽtŽ mise ˆ jour" ;
+						resultTmp = "Votre demande a ï¿½tï¿½ mise ï¿½ jour" ;
 					else
 						resultTmp = "Erreur en local" ;
 			}else
@@ -170,7 +170,7 @@ public class DemandeServeur extends Serveur{
 		demandeBddIsSet(context) ;
 		
 		demandeBdd.open() ;
-		demandeBdd.clear() ;
+		//demandeBdd.clear() ;
 		demandeBdd.close() ;
 		
 		ArrayList<String> args = new ArrayList<String>() ;
@@ -211,7 +211,7 @@ public class DemandeServeur extends Serveur{
 					demandeBdd.open() ;
 		    		demandeBdd.removeDemandeWithID(id_demande) ;
 		    		demandeBdd.close() ;
-						resultTmp = "Votre demande a ŽtŽ supprimŽe" ;
+						resultTmp = "Votre demande a ï¿½tï¿½ supprimï¿½e" ;
 			}else
 				resultTmp = (String)getResultArray().get("message") ;
 		}else

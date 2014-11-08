@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Base extends SQLiteOpenHelper {
 	private static final String TABLE_DEMANDE = "table_demande";
 	private static final String COL_ID = "ID";
-	private static final String COL_ID_USER = "ID_User";
+	private static final String COL_ID_USER = "IdUser";
 	private static final String COL_LAT = "Lat" ;
 	private static final String COL_LNG = "Lng" ;
 	private static final String COL_DESCRIPTION = "Description";
@@ -19,7 +19,9 @@ public class Base extends SQLiteOpenHelper {
 	private static final String COL_PASS = "Pass";
 	
 	private static final String CREATE_BDD = "CREATE TABLE " + TABLE_USER + " (" 
-	+ COL_ID + " INTEGER PRIMARY KEY, " + COL_LOGIN + " TEXT NOT NULL, "
+	+ COL_ID + " INTEGER PRIMARY KEY, " 
+	+ COL_ID_USER + " INTEGER NOT NULL, "
+	+ COL_LOGIN + " TEXT NOT NULL, "
 	+ COL_PASS + " TEXT NOT NULL );";
 	
 	private static final String CREATE_BDD2 = "CREATE TABLE " + TABLE_DEMANDE + " ("
@@ -33,7 +35,7 @@ public class Base extends SQLiteOpenHelper {
  
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		//on créé la table à partir de la requête écrite dans la variable CREATE_BDD
+		//on crÔøΩÔøΩ la table ÔøΩ partir de la requÔøΩte ÔøΩcrite dans la variable CREATE_BDD
 		db.execSQL(CREATE_BDD);
 		db.execSQL(CREATE_BDD2) ;
 	}

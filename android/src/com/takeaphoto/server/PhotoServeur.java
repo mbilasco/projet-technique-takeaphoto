@@ -17,7 +17,7 @@ public class PhotoServeur extends Serveur {
 
 	public int uploadFile(String sourceFilePath, User currentUser, int id_demande) throws Exception {
 		int serverResponseCode = 0;
-        String upLoadServerUri = "http://jeremiesamson-portfolio.com/wp-content/uploads/takeaphotoforme/upload_media.php";
+        String upLoadServerUri = "http://jules-vanneste.fr/takeaphotoforme/upload_media.php";
 
         String params = "?login="+ currentUser.getLogin() + "&pass=" +  MCrypt.bytesToHex( new MCrypt().encrypt(currentUser.getPass())) + "&id_demande=" + id_demande;
 		upLoadServerUri += params ;

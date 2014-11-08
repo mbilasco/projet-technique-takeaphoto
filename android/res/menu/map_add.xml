@@ -2,9 +2,9 @@
 
     <item
         android:id="@+id/menu_save"
-        android:showAsAction="ifRoom"
+        
         android:title="@string/menu_save"/>
     
-    
+   <!--  android:showAsAction="ifRoom"  -->
      
  </menu>

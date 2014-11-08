@@ -1,5 +1,6 @@
 package com.takeaphoto.activity;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -12,6 +13,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
+import com.takeaphoto.database.DemandesBDD;
+import com.takeaphoto.database.UserBDD;
+import com.takeaphoto.model.User;
 import com.takeaphoto.utils.CustomViewPager;
 
 public class MainActivity extends FragmentActivity implements
@@ -19,23 +23,41 @@ public class MainActivity extends FragmentActivity implements
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private CustomViewPager mViewPager;
-	private ManagerActivity manager = new ManagerActivity() ;
-	private MapAddActivity mapAdd = new MapAddActivity() ;
-	private MapReponseActivity mapRep = new MapReponseActivity() ;
-	final int NB_ONGLET = 3 ;
-	
+	private ManagerActivity manager = new ManagerActivity();
+	private MapAdd mapAdd = new MapAdd();
+	private MapReponse mapRep = new MapReponse();
+	private User user;
+	final int NB_ONGLET = 3;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		DemandesBDD demandesBDD = new DemandesBDD(this);
+		UserBDD userBDD = new UserBDD(this);
+		userBDD.open();
+		//ArrayList<User> tmp = userBDD.getUserWithId(this.getIntent().getIntExtra("EXTRA_ID_USER", -1));
+		ArrayList<User> tmp = userBDD.getAllUser();
+		User user = tmp.get(0);
+		userBDD.close();
 		
+		mapAdd.setDemandeBDD(demandesBDD);
+		mapRep.setDemandeBDD(demandesBDD);
+		mapAdd.setMainActivity(this);
+		mapRep.setMainActivity(this);
+		mapAdd.setUser(user);
+		mapRep.setUser(user);
+
 		// Set up the action bar.
-		final ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-	
+		final ActionBar actionBar = this.getActionBar();
+		if (actionBar != null) {
+			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		}
+
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(
+				getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (CustomViewPager) findViewById(R.id.photosViewPager);
@@ -44,38 +66,39 @@ public class MainActivity extends FragmentActivity implements
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
-		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+		mViewPager
+				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
 						actionBar.setSelectedNavigationItem(position);
 					}
 				});
-		
+
 		// For each of the sections in the app, add a tab to the action bar.
 		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
 			// Create a tab with text corresponding to the page title defined by
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
-				actionBar.addTab(actionBar.newTab()
-						.setText(mSectionsPagerAdapter.getPageTitle(i))
-						.setTabListener(this));
+			actionBar.addTab(actionBar.newTab()
+					.setText(mSectionsPagerAdapter.getPageTitle(i))
+					.setTabListener(this));
 		}
 
-		mViewPager.setPagingEnabled(false) ;
+		mViewPager.setPagingEnabled(false);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.main, menu);
+		// getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
 	public void onResume() {
 		super.onResume();
 	}
-	
+
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
@@ -85,40 +108,44 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onTabUnselected(ActionBar.Tab tab,FragmentTransaction fragmentTransaction) {}
+	public void onTabUnselected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
+	}
 
 	@Override
-	public void onTabReselected(ActionBar.Tab tab,FragmentTransaction fragmentTransaction) {}
+	public void onTabReselected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
+	}
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
-	
+
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
-		
+
 		@Override
 		public Fragment getItem(int position) {
-			
-			Fragment frag = new Fragment() ;
+
+			Fragment frag = new Fragment();
 			switch (position) {
 			case 0:
-				frag = mapAdd ;
+				frag = mapAdd;
 				break;
 
 			case 1:
-				frag = mapRep ;
-				break ;
-				
+				frag = mapRep;
+				break;
+
 			case 2:
-				frag = manager ;
+				frag = manager;
 				break;
 			}
-			
-			return frag ;
+
+			return frag;
 		}
 
 		@Override

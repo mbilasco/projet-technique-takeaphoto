@@ -44,14 +44,14 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 		HttpConnectionParams.setConnectionTimeout(client.getParams(), 1000);
 		HttpResponse response;
 		
-		// Cration du tableau de donne a envoyer en POST
+		// Crï¿½ation du tableau de donnï¿½e a envoyer en POST
 		List<NameValuePair> postdata = new ArrayList<NameValuePair>();
 
 		try {
 			// On traite les arguments
 			args = params[0] ;
 			nomFichier = args.get(0) ;
-			String URL = "http://www.jeremiesamson-portfolio.com/wp-content/uploads/takeaphotoforme/"
+			String URL = "http://jules-vanneste.fr/takeaphotoforme/"
 					+ nomFichier;
 			
 			for (int i = 1; i < args.size(); i++) {
@@ -66,12 +66,12 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 				postdata.add(new BasicNameValuePair(key, value));
 			}
 
-			// On envoit les donnes en POST au serveur
+			// On envoit les donnï¿½es en POST au serveur
 			HttpPost post = new HttpPost(URL);
 			post.setEntity(new UrlEncodedFormEntity(postdata));
 			System.out.println(response = client.execute(post));
 
-			// On prpare la rception de la rponse du serveur
+			// On prï¿½pare la rï¿½ception de la rï¿½ponse du serveur
 			InputStream inputStream = response.getEntity().getContent();
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(inputStream, "UTF-8"), 8);
@@ -80,7 +80,7 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 			while ((line = reader.readLine()) != null)
 				sb.append(line + "\n");
 
-			// On rcupre la rponse
+			// On rï¿½cupï¿½re la rï¿½ponse
 			response.getEntity().consumeContent();
 			String json = sb.toString();
 

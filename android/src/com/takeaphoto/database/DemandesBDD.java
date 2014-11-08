@@ -2,20 +2,22 @@ package com.takeaphoto.database;
 
 import java.util.ArrayList;
 
+import com.takeaphoto.model.Demande;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class DemandesBDD {
-	private static final int VERSION_BDD = 1;
+	private static final int VERSION_BDD = 3;
 	private static final String NOM_BDD = "takeaphoto.db";
  
 	private static final String TABLE_DEMANDE = "table_demande";
 	private static final String COL_ID = "ID";
 	private static final int NUM_COL_ID = 0;
-	private static final String COL_LOGIN = "Login";
-	private static final int NUM_COL_LOGIN = 1;
+	private static final String COL_USER_ID = "IdUser";
+	private static final int NUM_COL_USER_ID = 1;
 	private static final String COL_LAT = "Lat" ;
 	private static final int NUM_COL_LAT= 2;
 	private static final String COL_LNG = "Lng" ;
@@ -29,17 +31,17 @@ public class DemandesBDD {
 	private Base maBase;
  
 	public DemandesBDD(Context context){
-		//On créer la BDD et sa table
+		//On crÔøΩer la BDD et sa table
 		maBase = new Base(context, NOM_BDD, null, VERSION_BDD);
 	}
  
 	public void open(){
-		//on ouvre la BDD en écriture
+		//on ouvre la BDD en ÔøΩcriture
 		bdd = maBase.getWritableDatabase();
 	}
  
 	public void close(){
-		//on ferme l'accès à la BDD
+		//on ferme l'accÔøΩs ÔøΩ la BDD
 		bdd.close();
 	}
  
@@ -48,23 +50,23 @@ public class DemandesBDD {
 	}
  
 	public long insertDemande(Demande demande){
-		//Création d'un ContentValues (fonctionne comme une HashMap)
+		//CrÔøΩation d'un ContentValues (fonctionne comme une HashMap)
 		ContentValues values = new ContentValues();
-		//on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
-		values.put(COL_LOGIN, demande.getLogin()) ;
+		//on lui ajoute une valeur associÔøΩ ÔøΩ une clÔøΩ (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+		values.put(COL_USER_ID, demande.getId_user()) ;
 		values.put(COL_LAT, demande.getLat()) ;
 		values.put(COL_LNG, demande.getLng()) ;
 		values.put(COL_DESCRIPTION, demande.getDescription());
 		values.put(COL_ETAT, demande.getEtat()) ;
-		//on insère l'objet dans la BDD via le ContentValues
+		//on insÔøΩre l'objet dans la BDD via le ContentValues
 		return bdd.insert(TABLE_DEMANDE, null, values);
 	}
  
 	public int updateDemande(int id, Demande demande){
-		//La mise à jour d'une demande dans la BDD fonctionne plus ou moins comme une insertion
-		//il faut simple préciser quelle livre on doit mettre à jour grâce à l'ID
+		//La mise ÔøΩ jour d'une demande dans la BDD fonctionne plus ou moins comme une insertion
+		//il faut simple prÔøΩciser quelle livre on doit mettre ÔøΩ jour grÔøΩce ÔøΩ l'ID
 		ContentValues values = new ContentValues();
-		values.put(COL_LOGIN, demande.getLogin()) ;
+		values.put(COL_USER_ID, demande.getId_user()) ;
 		values.put(COL_LAT, demande.getLat()) ;
 		values.put(COL_LNG, demande.getLng()) ;
 		values.put(COL_DESCRIPTION, demande.getDescription());
@@ -73,25 +75,31 @@ public class DemandesBDD {
 	}
  
 	public int removeDemandeWithID(int id){
-		//Suppression d'une demande de la BDD grâce à l'ID
+		//Suppression d'une demande de la BDD grÔøΩce ÔøΩ l'ID
 		return bdd.delete(TABLE_DEMANDE, COL_ID + " = " +id, null);
 	}
  
 	public ArrayList<Demande> getDemandeWithLogin(String login){
-		//Récupère dans un Cursor les valeur correspondant à une demande contenu dans la BDD (ici on sélectionne les demandes grace a son login)
-		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_LOGIN, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_LOGIN + " LIKE \"" + login +"\"", null, null, null, null);
-		return cursorToDemande(c);
-	}
- 
-	public ArrayList<Demande> getDemandeWithoutLogin(String login){
-		//Récupère dans un Cursor les valeur correspondant à une demande contenu dans la BDD (ici on sélectionne les demandes grace a son login)
-		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_LOGIN, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_LOGIN + " NOT LIKE \"" + login +"\"", null, null, null, null);
+		//RÔøΩcupÔøΩre dans un Cursor les valeur correspondant ÔøΩ une demande contenu dans la BDD (ici on sÔøΩlectionne les demandes grace a son login)
+		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_USER_ID + " LIKE \"" + login +"\"", null, null, null, null);
 		return cursorToDemande(c);
 	}
 	
-	//Cette méthode permet de convertir un cursor en une demande
+	public ArrayList<Demande> getDemandeWithId(int id){
+		//RÔøΩcupÔøΩre dans un Cursor les valeur correspondant ÔøΩ une demande contenu dans la BDD (ici on sÔøΩlectionne les demandes grace a son login)
+		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_ID + " = " + id + "", null, null, null, null);
+		return cursorToDemande(c);
+	}
+ 
+	public ArrayList<Demande> getDemandeWithoutId(int id_user){
+		//RÔøΩcupÔøΩre dans un Cursor les valeur correspondant ÔøΩ une demande contenu dans la BDD (ici on sÔøΩlectionne les demandes grace a son login)
+		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_USER_ID + " != " + id_user + "", null, null, null, null);
+		return cursorToDemande(c);
+	}
+	
+	//Cette mÔøΩthode permet de convertir un cursor en une demande
 	private ArrayList<Demande> cursorToDemande(Cursor c){
-		//si aucun élément n'a été retourné dans la requête, on renvoie null
+		//si aucun ÔøΩlÔøΩment n'a ÔøΩtÔøΩ retournÔøΩ dans la requÔøΩte, on renvoie null
 		if (c.getCount() == 0)
 			return null;
 	
@@ -100,12 +108,12 @@ public class DemandesBDD {
 		c.moveToFirst();
 		
 		do{
-			//On créé une demande
+			//On crÔøΩÔøΩ une demande
 			Demande demande = new Demande() ;
 			
-			//on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
+			//on lui affecte toutes les infos grÔøΩce aux infos contenues dans le Cursor
 			demande.setId(c.getInt(NUM_COL_ID));
-			demande.setLogin(c.getString(NUM_COL_LOGIN)) ;
+			demande.setId_user(c.getInt(NUM_COL_USER_ID)) ;
 			demande.setLat(c.getDouble(NUM_COL_LAT)) ;
 			demande.setLng(c.getDouble(NUM_COL_LNG)) ;
 			demande.setDescription(c.getString(NUM_COL_DESCRIPTION)) ;

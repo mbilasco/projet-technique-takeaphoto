@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">TakeAPhoto</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="create_account">Créer un compte</string>
+    <string name="email">Adresse email</string>
+    <string name="password">Mot de passe</string>
+    <string name="connect">Se connecter</string>
+    <string name="title_activity_login_display">LoginDisplayActivity</string>
+	<string name="hint_mail">"Ici : L'adresse email de l'utilisateur"</string>
+	<string name="hint_pass">"Ici : Le mot de passe de l'utilisateur"</string>
+	<string name="email_format_error">"Le champs email ne correspond pas au format d'une adresse mail"</string>
+	<string name="email_or_password_empty">"L'adresse email et mot de passe sont obligatoires"</string>
+	<string name="menu_save">"Valider la demande"</string>
+	<string name="menu_search">"Recherche"</string>
+	<string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="action_settings">Parametres</string>
+</resources>

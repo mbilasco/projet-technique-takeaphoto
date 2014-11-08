@@ -43,18 +43,18 @@ public class Login extends Activity {
 					return;
 				}
 
-				// On dclare le pattern que lÕon doit suivre
+				// On dï¿½clare le pattern que lï¿½on doit suivre
 				Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
-				// On dclare un matcher, qui comparera le pattern avec la
-				// string passe en argument
+				// On dï¿½clare un matcher, qui comparera le pattern avec la
+				// string passï¿½e en argument
 				Matcher m = p.matcher(loginTxt);
-				// Si lÕadresse mail saisie ne correspond au format dÕune
+				// Si lï¿½adresse mail saisie ne correspond au format dï¿½une
 				// adresse mail
 				if (!m.matches()) {
 					// Toast est une classe fournie par le SDK Android
 					// pour afficher les messages dans des minis pop up
 					// Le premier argument est le Context, puis
-					// le message et ˆ la fin la dure de ce dernier
+					// le message et ï¿½ la fin la durï¿½e de ce dernier
 					Toast.makeText(Login.this,
 							R.string.email_format_error, Toast.LENGTH_SHORT)
 							.show();
