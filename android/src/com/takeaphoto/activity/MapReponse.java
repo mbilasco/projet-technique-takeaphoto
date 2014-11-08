@@ -14,13 +14,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
+import com.takeaphoto.server.DemandeServeur;
 import com.takeaphoto.database.DemandesBDD;
 import com.takeaphoto.database.UserBDD;
 
 public class MapReponse extends SupportMapFragment {
-
-	final String EXTRA_LOGIN = "user_login";
-
 	private GoogleMap gMap;
 	private Activity mainActivity;
 	private DemandesBDD demandesBDD;
@@ -33,8 +31,8 @@ public class MapReponse extends SupportMapFragment {
 		setHasOptionsMenu(true);
 		markers = new ArrayList<MarkerOptions>();
 	}
-	
-	public void initialize(Activity main, DemandesBDD demandesBDD, User user){
+
+	public void initialize(Activity main, DemandesBDD demandesBDD, User user) {
 		this.setMainActivity(main);
 		this.setDemandeBDD(demandesBDD);
 		this.setUser(user);
@@ -47,8 +45,8 @@ public class MapReponse extends SupportMapFragment {
 	public void setDemandeBDD(DemandesBDD demandesBDD) {
 		this.demandesBDD = demandesBDD;
 	}
-	
-	public void setUser(User user){
+
+	public void setUser(User user) {
 		this.user = user;
 	}
 
@@ -70,14 +68,17 @@ public class MapReponse extends SupportMapFragment {
 	}
 
 	private void updateDemandes() {
-		demandesBDD.open();
-		ArrayList<Demande> demandes = demandesBDD.getDemandeWithoutId(this.user.getId());
-		demandesBDD.close();
+		//demandesBDD.open();
+		DemandeServeur demandeServeur = new DemandeServeur();
+		//demandeServeur.addDemande(mainActivity.getApplicationContext(), user, demande);
+		//ArrayList<Demande> demandes = demandesBDD.getDemandeWithoutId(this.user.getId());
+		ArrayList<Demande> demandes = demandeServeur.getDemandesOthers(mainActivity.getApplicationContext(), this.user);
+		//demandesBDD.close();
 
 		if (demandes != null) {
 			for (Demande d : demandes) {
 				MarkerOptions m = new MarkerOptions();
-				m.title(this.user.getLogin());
+				m.title("Demande");
 				m.position(new LatLng(d.getLat(), d.getLng()));
 				m.snippet(d.getDescription());
 				markers.add(m);

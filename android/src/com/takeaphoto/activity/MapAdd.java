@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
+import com.takeaphoto.server.DemandeServeur;
 import com.takeaphoto.database.DemandesBDD;
 
 /**
@@ -39,7 +40,6 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	 * available.
 	 */
 	private GoogleMap gMap;
-	final String EXTRA_ID = "user_id";
 	private MarkerOptions markerOptions;
 	private Activity mainActivity;
 	private DemandesBDD demandesBDD;
@@ -172,6 +172,8 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 										markerOptions.getPosition().latitude,
 										markerOptions.getPosition().longitude,
 										markerOptions.getSnippet());
+								DemandeServeur demandeServeur = new DemandeServeur();
+								demandeServeur.addDemande(mainActivity.getApplicationContext(), user, demande);
 								demandesBDD.open();
 								demandesBDD.insertDemande(demande);
 								demandesBDD.close();

@@ -85,9 +85,9 @@ public class DemandesBDD {
 		return cursorToDemande(c);
 	}
 	
-	public ArrayList<Demande> getDemandeWithId(int id){
+	public ArrayList<Demande> getDemandeWithId(int id_user){
 		//R�cup�re dans un Cursor les valeur correspondant � une demande contenu dans la BDD (ici on s�lectionne les demandes grace a son login)
-		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_ID + " = " + id + "", null, null, null, null);
+		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_USER_ID + " = " + id_user + "", null, null, null, null);
 		return cursorToDemande(c);
 	}
  

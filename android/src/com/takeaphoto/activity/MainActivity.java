@@ -16,6 +16,7 @@ import android.view.Menu;
 import com.takeaphoto.database.DemandesBDD;
 import com.takeaphoto.database.UserBDD;
 import com.takeaphoto.model.User;
+import com.takeaphoto.server.DemandeServeur;
 import com.takeaphoto.utils.CustomViewPager;
 
 public class MainActivity extends FragmentActivity implements
@@ -45,6 +46,7 @@ public class MainActivity extends FragmentActivity implements
 		mapRep.setDemandeBDD(demandesBDD);
 		mapAdd.setMainActivity(this);
 		mapRep.setMainActivity(this);
+		manager.setUser(user);
 		mapAdd.setUser(user);
 		mapRep.setUser(user);
 

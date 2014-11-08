@@ -36,10 +36,8 @@ import com.takeaphoto.server.PhotoServeur;
 import com.takeaphoto.server.UserServeur;
 
 public class ManagerActivity extends ListFragment {
-
-	final String EXTRA_ID_USER = "ID_User";
 	private ArrayList<Demande> demandes;
-	private User currentUser;
+	private User user;
 	private ArrayList<Bitmap> photos = null;
 	private int nbPhotosCurrent, nbPhotos;
 
@@ -48,27 +46,28 @@ public class ManagerActivity extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		int id = getActivity().getIntent().getIntExtra(EXTRA_ID_USER, -1);
-		currentUser = new UserServeur().getUser(getActivity(), id);
-
 		if (demandes == null) {
 			updateDemandes();
 		}
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	private void updateDemandes() {
-		if (currentUser != null) {
-			new DemandeServeur().updateMyDemandesLocal(getActivity(),
-					currentUser);
+		if (this.user != null) {
+			new DemandeServeur().updateMyDemandesLocal(getActivity(), this.user);
+			//demandes = new DemandeServeur().getMyDemandesLocal(getActivity(), this.user);
 			actualiserListeDemande();
 		} else
 			setListAdapter(null);
 	}
 
 	public void actualiserListeDemande() {
-		if (currentUser != null) {
+		if (this.user != null) {
 			demandes = new DemandeServeur().getMyDemandesLocal(getActivity(),
-					currentUser);
+					this.user);
 
 			if (demandes != null) {
 				// Each row in the list stores country name, currency and flag
@@ -173,7 +172,7 @@ public class ManagerActivity extends ListFragment {
 
 			alert.show();
 		} else if (etat == 1 || etat == 2) {
-			ArrayList<Object> result = new PhotoServeur().getUrls(currentUser,
+			ArrayList<Object> result = new PhotoServeur().getUrls(this.user,
 					id_demande);
 			if (result != null) {
 				photos = new ArrayList<Bitmap>();
@@ -298,8 +297,8 @@ public class ManagerActivity extends ListFragment {
 			alert.setNegativeButton("Non", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					new DemandeServeur().updateDemande(getActivity(),
-							currentUser, id_demande, "etat", "2");
+					new DemandeServeur().updateDemande(getActivity(), user,
+							id_demande, "etat", "2");
 					actualiserListeDemande();
 				}
 			});
@@ -323,8 +322,8 @@ public class ManagerActivity extends ListFragment {
 
 				String desc = input.getText().toString();
 				String result = new DemandeServeur().updateDemande(
-						getActivity(), currentUser, demandes.get(position)
-								.getId(), "description", desc);
+						getActivity(), user, demandes.get(position).getId(),
+						"description", desc);
 				if (result != null)
 					Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT)
 							.show();
@@ -348,7 +347,7 @@ public class ManagerActivity extends ListFragment {
 	private void supprimerDemande(final int id_demande) {
 
 		String result = new DemandeServeur().removeDemande(getActivity(),
-				currentUser, id_demande);
+				this.user, id_demande);
 
 		if (result != null)
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
