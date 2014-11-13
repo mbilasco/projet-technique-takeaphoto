@@ -78,7 +78,7 @@ public class MapReponse extends SupportMapFragment {
 		if (demandes != null) {
 			for (Demande d : demandes) {
 				MarkerOptions m = new MarkerOptions();
-				m.title("Demande");
+				m.title("Demande de + TODO...");
 				m.position(new LatLng(d.getLat(), d.getLng()));
 				m.snippet(d.getDescription());
 				markers.add(m);
