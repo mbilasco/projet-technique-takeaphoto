@@ -22,7 +22,7 @@
     <string name="textview">TextView</string>
     <string name="capture">Prendre la photo</string>
     <string name="erreur_connextion">"Erreur de connexion au serveur, vérifier vôtre connexion puis réessayer"</string>
-    <string name="erreur_current_user">"Erreur Utilisateur Courant"</string>  
+    <string name="erreur_current_user">"Erreur Utilisateur Courant"</string>
     <string name="zoomInf">"-"</string>
     <string name="zoomSup">"+"</string>    
     <string name="title_activity_login_display">name</string> 

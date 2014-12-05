@@ -1,9 +1,9 @@
 package com.takeaphoto.server;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Context;
-
 import com.takeaphoto.database.DemandesBDD;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
@@ -64,14 +64,14 @@ public class DemandeServeur extends Serveur{
 	}
 	
 	public ArrayList<Demande> getMyDemandesLocal(Context context, User currentUser){
-		demandeBddIsSet(context) ;
-		ArrayList<Demande> resultTmp = null ;
+		demandeBddIsSet(context);
+		ArrayList<Demande> resultTmp = null;
 		
-		demandeBdd.open() ;
-        resultTmp = demandeBdd.getDemandeWithId(currentUser.getId()) ;
-        demandeBdd.close() ;
+		demandeBdd.open();
+        resultTmp = demandeBdd.getDemandeWithIdUser(currentUser.getId());
+        demandeBdd.close();
 		
-		return resultTmp ;
+		return resultTmp;
 	}
 
 	public ArrayList<Demande> getDemandesOthers(Context context, User currentUser) {
@@ -96,7 +96,7 @@ public class DemandeServeur extends Serveur{
 	    	}
     	}else{
     		demandeBdd.open() ;
-    		resultTmp = demandeBdd.getDemandeWithId(currentUser.getId()) ; 
+    		resultTmp = demandeBdd.getDemandeWithIdUser(currentUser.getId()) ; 
     		demandeBdd.close() ;
     	}
 	    	
@@ -124,7 +124,7 @@ public class DemandeServeur extends Serveur{
 				setResultToFalse() ;
 				setRunning(true) ;
 					if(updateDemandeLocal(context, currentUser, id_demande))
-						resultTmp = "Votre demande a �t� mise � jour" ;
+						resultTmp = "Votre demande a ete mise a jour" ;
 					else
 						resultTmp = "Erreur en local" ;
 			}else
@@ -170,7 +170,6 @@ public class DemandeServeur extends Serveur{
 		demandeBddIsSet(context) ;
 		
 		demandeBdd.open() ;
-		//demandeBdd.clear() ;
 		demandeBdd.close() ;
 		
 		ArrayList<String> args = new ArrayList<String>() ;
@@ -184,9 +183,11 @@ public class DemandeServeur extends Serveur{
 	    if(getResultArray() != null){
 			demandeBdd.open() ;
 			for (String mapKey : getResultArray().keySet()) {
-				if(!mapKey.contains("result") && !mapKey.contains("id"))
-					if(demandeBdd.getDemandeWithId(((Demande)getResultArray().get(mapKey)).getId()) == null)
-						demandeBdd.insertDemande((Demande)getResultArray().get(mapKey)) ;
+				if(!mapKey.contains("result") && !mapKey.contains("id")){
+					if(demandeBdd.getDemandeWithId(((Demande)getResultArray().get(mapKey)).getId()) == null){
+						demandeBdd.insertDemande((Demande)getResultArray().get(mapKey));
+					}
+				}
 	    	}
 			demandeBdd.close() ;
 		}
@@ -211,7 +212,7 @@ public class DemandeServeur extends Serveur{
 					demandeBdd.open() ;
 		    		demandeBdd.removeDemandeWithID(id_demande) ;
 		    		demandeBdd.close() ;
-						resultTmp = "Votre demande a �t� supprim�e" ;
+						resultTmp = "Votre demande a ete supprimee" ;
 			}else
 				resultTmp = (String)getResultArray().get("message") ;
 		}else
@@ -220,5 +221,36 @@ public class DemandeServeur extends Serveur{
 		setResultToFalse() ;
 		
 		return resultTmp ;
+	}
+	
+	public void uploadMedia(Context context, User currentUser, int id_demande, File file){
+		demandeBddIsSet(context) ;
+		
+		demandeBdd.open() ;
+		demandeBdd.close() ;
+		
+		ArrayList<String> args = new ArrayList<String>() ;
+		args.add("upload_media.php") ;
+		args.add("login="+currentUser.getLogin());
+		args.add("pass="+currentUser.getPass()) ;
+		args.add("id_demande="+id_demande) ;
+		args.add("uploaded_file="+file);
+		
+		sendJson(args);
+		while(isRunning()){}
+			
+	    if(getResultArray() != null){
+			demandeBdd.open() ;
+			for (String mapKey : getResultArray().keySet()) {
+				if(!mapKey.contains("result") && !mapKey.contains("id")){
+					if(demandeBdd.getDemandeWithId(((Demande)getResultArray().get(mapKey)).getId()) == null){
+						demandeBdd.insertDemande((Demande)getResultArray().get(mapKey));
+					}
+				}
+	    	}
+			demandeBdd.close() ;
+		}
+		
+		setResultToFalse() ;
 	}
 }

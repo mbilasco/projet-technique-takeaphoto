@@ -53,6 +53,7 @@ public class DemandesBDD {
 		//Cr�ation d'un ContentValues (fonctionne comme une HashMap)
 		ContentValues values = new ContentValues();
 		//on lui ajoute une valeur associ� � une cl� (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+		values.put(COL_ID, demande.getId());
 		values.put(COL_USER_ID, demande.getId_user()) ;
 		values.put(COL_LAT, demande.getLat()) ;
 		values.put(COL_LNG, demande.getLng()) ;
@@ -78,20 +79,26 @@ public class DemandesBDD {
 		//Suppression d'une demande de la BDD gr�ce � l'ID
 		return bdd.delete(TABLE_DEMANDE, COL_ID + " = " +id, null);
 	}
+	
+	public ArrayList<Demande> getDemandeWithId(int id_demande){
+		//R�cup�re dans un Cursor les valeur correspondant � une demande contenu dans la BDD (ici on s�lectionne les demandes grace a son login)
+		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_ID + " = " + id_demande + "", null, null, null, null);
+		return cursorToDemande(c);
+	}
  
-	public ArrayList<Demande> getDemandeWithLogin(String login){
+	public ArrayList<Demande> getDemandeWithLoginUser(String login){
 		//R�cup�re dans un Cursor les valeur correspondant � une demande contenu dans la BDD (ici on s�lectionne les demandes grace a son login)
 		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_USER_ID + " LIKE \"" + login +"\"", null, null, null, null);
 		return cursorToDemande(c);
 	}
 	
-	public ArrayList<Demande> getDemandeWithId(int id_user){
+	public ArrayList<Demande> getDemandeWithIdUser(int id_user){
 		//R�cup�re dans un Cursor les valeur correspondant � une demande contenu dans la BDD (ici on s�lectionne les demandes grace a son login)
 		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_USER_ID + " = " + id_user + "", null, null, null, null);
 		return cursorToDemande(c);
 	}
  
-	public ArrayList<Demande> getDemandeWithoutId(int id_user){
+	public ArrayList<Demande> getDemandeWithoutIdUser(int id_user){
 		//R�cup�re dans un Cursor les valeur correspondant � une demande contenu dans la BDD (ici on s�lectionne les demandes grace a son login)
 		Cursor c = bdd.query(TABLE_DEMANDE, new String[] {COL_ID, COL_USER_ID, COL_LAT, COL_LNG, COL_DESCRIPTION, COL_ETAT}, COL_USER_ID + " != " + id_user + "", null, null, null, null);
 		return cursorToDemande(c);

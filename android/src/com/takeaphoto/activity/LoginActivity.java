@@ -45,8 +45,16 @@ public class LoginActivity extends Activity {
 		// alors on pr�rempli les champs
 		User user = new UserServeur().getOnlyUser(getApplicationContext());
 		if (user != null) {
-			login.setText(user.getLogin());
-			pass.setText(user.getPass());
+			int id = user.getId();
+
+			// donc on acc�de au main de l'application en passant
+			// l'id utilisateur en param�tre
+			Intent intent = new Intent(LoginActivity.this,
+					MainActivity.class);
+			intent.putExtra(EXTRA_ID_USER, id);
+			startActivity(intent);
+			//login.setText(user.getLogin());
+			//pass.setText(user.getPass());
 		}
 
 		// Impl�mentation du listener pour le bouton d'authentification

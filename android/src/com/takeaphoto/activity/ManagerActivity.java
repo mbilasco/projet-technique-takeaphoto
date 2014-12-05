@@ -58,7 +58,6 @@ public class ManagerActivity extends ListFragment {
 	private void updateDemandes() {
 		if (this.user != null) {
 			new DemandeServeur().updateMyDemandesLocal(getActivity(), this.user);
-			//demandes = new DemandeServeur().getMyDemandesLocal(getActivity(), this.user);
 			actualiserListeDemande();
 		} else
 			setListAdapter(null);
@@ -66,8 +65,7 @@ public class ManagerActivity extends ListFragment {
 
 	public void actualiserListeDemande() {
 		if (this.user != null) {
-			demandes = new DemandeServeur().getMyDemandesLocal(getActivity(),
-					this.user);
+			demandes = new DemandeServeur().getMyDemandesLocal(getActivity(), this.user);
 
 			if (demandes != null) {
 				// Each row in the list stores country name, currency and flag
@@ -81,18 +79,15 @@ public class ManagerActivity extends ListFragment {
 
 					switch (demandes.get(i).getEtat()) {
 					case 0:
-						// images[i] = R.drawable.vert ;
-						images[i] = R.drawable.android;
+						images[i] = R.drawable.vert;
 						break;
 
 					case 1:
-						// images[i] = R.drawable.jaune ;
-						images[i] = R.drawable.android;
+						images[i] = R.drawable.jaune;
 						break;
 
 					case 2:
-						// images[i] = R.drawable.rouge ;
-						images[i] = R.drawable.android;
+						images[i] = R.drawable.rouge;
 						break;
 					default:
 						break;
@@ -172,8 +167,7 @@ public class ManagerActivity extends ListFragment {
 
 			alert.show();
 		} else if (etat == 1 || etat == 2) {
-			ArrayList<Object> result = new PhotoServeur().getUrls(this.user,
-					id_demande);
+			ArrayList<Object> result = new PhotoServeur().getUrls(this.user,id_demande);
 			if (result != null) {
 				photos = new ArrayList<Bitmap>();
 				nbPhotos = result.size();
@@ -349,11 +343,13 @@ public class ManagerActivity extends ListFragment {
 		String result = new DemandeServeur().removeDemande(getActivity(),
 				this.user, id_demande);
 
-		if (result != null)
+		if (result != null){
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-		else
+		}
+		else{
 			Toast.makeText(getActivity(), R.string.erreur_connextion,
 					Toast.LENGTH_SHORT).show();
+		}
 
 		actualiserListeDemande();
 	}
