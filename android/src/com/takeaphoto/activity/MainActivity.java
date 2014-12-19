@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
+import com.sample.activity.R;
 import com.takeaphoto.database.DemandesBDD;
 import com.takeaphoto.database.UserBDD;
 import com.takeaphoto.model.User;

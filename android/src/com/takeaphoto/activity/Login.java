@@ -3,6 +3,8 @@ package com.takeaphoto.activity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sample.activity.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

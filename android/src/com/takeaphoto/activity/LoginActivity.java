@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.sample.activity.R;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.UserServeur;
 
