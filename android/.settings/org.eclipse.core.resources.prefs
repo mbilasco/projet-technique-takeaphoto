@@ -1,9 +1,0 @@
-eclipse.preferences.version=1
-encoding//src/com/takeaphoto/activity/Login.java=UTF-8
-encoding//src/com/takeaphoto/activity/LoginActivity.java=UTF-8
-encoding//src/com/takeaphoto/activity/MapAdd.java=UTF-8
-encoding//src/com/takeaphoto/database/Base.java=UTF-8
-encoding//src/com/takeaphoto/database/DemandesBDD.java=UTF-8
-encoding//src/com/takeaphoto/database/UserBDD.java=UTF-8
-encoding//src/com/takeaphoto/server/DemandeServeur.java=UTF-8
-encoding//src/com/takeaphoto/server/ServeurAsync.java=UTF-8
