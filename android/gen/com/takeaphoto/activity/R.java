@@ -31,23 +31,27 @@ public final class R {
         public static final int bg=0x7f020001;
         public static final int ic_action_search=0x7f020002;
         public static final int ic_launcher=0x7f020003;
-        public static final int jaune=0x7f020004;
-        public static final int marker=0x7f020005;
-        public static final int rouge=0x7f020006;
-        public static final int vert=0x7f020007;
+        public static final int ic_oauth_yahoo=0x7f020004;
+        public static final int jaune=0x7f020005;
+        public static final int marker=0x7f020006;
+        public static final int rouge=0x7f020007;
+        public static final int vert=0x7f020008;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000c;
+        public static final int action_settings=0x7f09000f;
         public static final int connect=0x7f090004;
         public static final int create_account=0x7f090003;
-        public static final int image=0x7f090009;
-        public static final int map=0x7f090006;
-        public static final int menu_save=0x7f09000d;
-        public static final int menu_settings=0x7f09000b;
-        public static final int photosViewPager=0x7f090005;
-        public static final int section_label=0x7f090008;
-        public static final int surfaceViewCamera=0x7f090007;
-        public static final int txt=0x7f09000a;
+        public static final int image=0x7f09000c;
+        public static final int imageView1=0x7f090005;
+        public static final int loadingSignIn=0x7f090006;
+        public static final int loadinglabel=0x7f090007;
+        public static final int map=0x7f090009;
+        public static final int menu_save=0x7f090010;
+        public static final int menu_settings=0x7f09000e;
+        public static final int photosViewPager=0x7f090008;
+        public static final int section_label=0x7f09000b;
+        public static final int surfaceViewCamera=0x7f09000a;
+        public static final int txt=0x7f09000d;
         public static final int user_email=0x7f090000;
         public static final int user_password=0x7f090001;
         public static final int user_password2=0x7f090002;
@@ -55,11 +59,12 @@ public final class R {
     public static final class layout {
         public static final int activity_create=0x7f030000;
         public static final int activity_login=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int activity_map=0x7f030003;
-        public static final int activity_photo=0x7f030004;
-        public static final int fragment_main_dummy=0x7f030005;
-        public static final int listview=0x7f030006;
+        public static final int activity_login_flickr=0x7f030002;
+        public static final int activity_main=0x7f030003;
+        public static final int activity_map=0x7f030004;
+        public static final int activity_photo=0x7f030005;
+        public static final int fragment_main_dummy=0x7f030006;
+        public static final int listview=0x7f030007;
     }
     public static final class menu {
         public static final int login=0x7f080000;

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.support.v4.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -74,8 +74,8 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 
 		// Setting the title for the marker.
 		// This will be displayed on taping the marker
-		if (mainActivity.getIntent() != null && this.user.getId() != -1)		
-			markerOptions.title(this.user.getLogin());
+		if (mainActivity.getIntent() != null && this.user.getUserId() != null)
+			markerOptions.title(this.user.getUserName());
 		else
 			markerOptions.title("Unregistered User (developpement)");
 		markerOptions.snippet(result);
@@ -108,8 +108,7 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 					// Setting the position for the marker
 					markerOptions.position(point);
 
-					AlertDialog.Builder alert = new AlertDialog.Builder(
-							mainActivity);
+					AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
 
 					alert.setTitle("Description de la photo voulue :");
 
@@ -119,16 +118,14 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 
 					alert.setPositiveButton("Ok",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
+								public void onClick(DialogInterface dialog,	int whichButton) {
 									setMarker(input.getText().toString());
 								}
 							});
 
 					alert.setNegativeButton("Cancel",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
+								public void onClick(DialogInterface dialog,	int whichButton) {
 									// Canceled.
 								}
 							});
@@ -159,27 +156,20 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 
 			if (desc != null) {
 				alert.setTitle("Voulez-vous vraiment valider cette demande ?");
-
-				alert.setMessage("Description : \n"
-						+ markerOptions.getSnippet());
-
+				alert.setMessage("Description : \n"	+ markerOptions.getSnippet());
+				
 				alert.setPositiveButton("Ok",
 						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								Demande demande = new Demande(
-										user.getId(),
-										markerOptions.getPosition().latitude,
-										markerOptions.getPosition().longitude,
-										markerOptions.getSnippet());
+							public void onClick(DialogInterface dialog,	int whichButton) {
+								Demande demande = new Demande(user.getUserId(),	markerOptions.getPosition().latitude, markerOptions.getPosition().longitude, markerOptions.getSnippet());
 								DemandeServeur demandeServeur = new DemandeServeur();
-								demandeServeur.addDemande(mainActivity.getApplicationContext(), user, demande);
+
+								demandeServeur.addDemande(mainActivity.getApplicationContext(),	user, demande);
+			
 								demandesBDD.open();
 								demandesBDD.insertDemande(demande);
 								demandesBDD.close();
-								Toast.makeText(mainActivity,
-										"Votre demande a ete ajoutee",
-										Toast.LENGTH_SHORT).show();
+								Toast.makeText(mainActivity, "Votre demande a ete ajoutee",	Toast.LENGTH_SHORT).show();
 
 								markerOptions = new MarkerOptions();
 								gMap.clear();
@@ -188,8 +178,7 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 
 				alert.setNegativeButton("Cancel",
 						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
+							public void onClick(DialogInterface dialog, int whichButton) {
 								// Canceled.
 							}
 						});
@@ -198,8 +187,8 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 				alert.setMessage("Vous devez d'abord poser un marqueur et lui ajouter une description");
 				alert.setNeutralButton("OK",
 						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
+							public void onClick(DialogInterface dialog,	int whichButton) {
+								
 							}
 						});
 			}
@@ -215,12 +204,8 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 		}
 	}
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View myFragmentView = super.onCreateView(inflater, container,
-				savedInstanceState);
-
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View myFragmentView = super.onCreateView(inflater, container, savedInstanceState);
 		return myFragmentView;
 	}
 

@@ -19,6 +19,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +34,6 @@ import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 import com.takeaphoto.server.PhotoServeur;
-import com.takeaphoto.server.UserServeur;
 
 public class ManagerActivity extends ListFragment {
 	private ArrayList<Demande> demandes;
@@ -56,6 +56,7 @@ public class ManagerActivity extends ListFragment {
 	}
 
 	private void updateDemandes() {
+		Log.i("manager", user.getUserId());
 		if (this.user != null) {
 			new DemandeServeur().updateMyDemandesLocal(getActivity(), this.user);
 			actualiserListeDemande();
@@ -78,19 +79,19 @@ public class ManagerActivity extends ListFragment {
 					Descriptions[i] = demandes.get(i).getDescription();
 
 					switch (demandes.get(i).getEtat()) {
-					case 0:
-						images[i] = R.drawable.vert;
-						break;
-
-					case 1:
-						images[i] = R.drawable.jaune;
-						break;
-
-					case 2:
-						images[i] = R.drawable.rouge;
-						break;
-					default:
-						break;
+						case 0:
+							images[i] = R.drawable.vert;
+							break;
+	
+						case 1:
+							images[i] = R.drawable.jaune;
+							break;
+	
+						case 2:
+							images[i] = R.drawable.rouge;
+							break;
+						default:
+							break;
 					}
 				}
 
@@ -143,13 +144,9 @@ public class ManagerActivity extends ListFragment {
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 		int etat = demandes.get(position).getEtat();
 		if (etat == 0) {
-
-			alert.setTitle("Demande : "
-					+ demandes.get(position).getDescription());
-			alert.setPositiveButton("Modifier Description",
-					new OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
+			alert.setTitle("Demande : " + demandes.get(position).getDescription());
+			alert.setPositiveButton("Modifier Description", new OnClickListener() {
+						public void onClick(DialogInterface dialog,	int whichButton) {
 							renomerDemande(position);
 						}
 					});

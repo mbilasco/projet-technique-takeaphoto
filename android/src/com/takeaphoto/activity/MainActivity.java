@@ -14,7 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
 import com.takeaphoto.database.DemandesBDD;
-import com.takeaphoto.database.UserBDD;
+
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 import com.takeaphoto.utils.CustomViewPager;
@@ -35,21 +35,25 @@ public class MainActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		DemandesBDD demandesBDD = new DemandesBDD(this);
+		/*
 		UserBDD userBDD = new UserBDD(this);
 		userBDD.open();
 		//ArrayList<User> tmp = userBDD.getUserWithId(this.getIntent().getIntExtra("EXTRA_ID_USER", -1));
 		ArrayList<User> tmp = userBDD.getAllUser();
 		User user = tmp.get(0);
 		userBDD.close();
-		
+		*/
 		mapAdd.setDemandeBDD(demandesBDD);
 		mapRep.setDemandeBDD(demandesBDD);
 		mapAdd.setMainActivity(this);
 		mapRep.setMainActivity(this);
+		user = new User(this.getIntent().getStringExtra("USER_ID"),this.getIntent().getStringExtra("USER_NAME"));
 		manager.setUser(user);
 		mapAdd.setUser(user);
 		mapRep.setUser(user);
-
+		mapRep.setmContext(this);
+		mapRep.setOauth(this.getIntent().getSerializableExtra("OAUTH"));
+		
 		// Set up the action bar.
 		final ActionBar actionBar = this.getActionBar();
 		if (actionBar != null) {

@@ -2,7 +2,7 @@ package com.takeaphoto.model;
 
 public class Demande {
 	private int id ;
-	private int idUser ;
+	private String userId;
 	private Double lat ;
 	private Double lng ;
 	private String description ;
@@ -10,8 +10,8 @@ public class Demande {
 	
 	public Demande(){}
 	
-	public Demande(int idUser, Double lat, Double lng, String description) {
-		this.idUser = idUser;
+	public Demande(String userId, Double lat, Double lng, String description) {
+		this.userId = userId;
 		this.lat = lat ;
 		this.lng = lng ;
 		this.description = description;
@@ -26,12 +26,12 @@ public class Demande {
 		this.id = id;
 	}
 	
-	public int getId_user() {
-		return idUser;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setId_user(int id_user) {
-		this.idUser = id_user;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getDescription() {
@@ -68,7 +68,7 @@ public class Demande {
 
 	@Override
 	public String toString() {
-		return "Demande [id=" + id + ", id_user=" + idUser + ", lat=" + lat
+		return "Demande [id=" + id + ", userId=" + userId + ", lat=" + lat
 				+ ", lng=" + lng + ", description=" + description + ", etat="
 				+ etat + "]";
 	}

@@ -19,7 +19,7 @@ public class PhotoServeur extends Serveur {
 		int serverResponseCode = 0;
         String upLoadServerUri = "http://jules-vanneste.fr/takeaphotoforme/upload_media.php";
 
-        String params = "?login="+ currentUser.getLogin() + "&pass=" +  MCrypt.bytesToHex( new MCrypt().encrypt(currentUser.getPass())) + "&id_demande=" + id_demande;
+        String params = "?idUser="+ currentUser.getUserId() + "&id_demande=" + id_demande;
 		upLoadServerUri += params ;
 		System.out.println(upLoadServerUri);
         
@@ -102,8 +102,7 @@ public class PhotoServeur extends Serveur {
 		
         ArrayList<String> args = new ArrayList<String>() ;
         args.add("get_photos.php") ;
-		args.add("login="+currentUser.getLogin());
-		args.add("pass="+currentUser.getPass()) ;
+		args.add("idUser="+currentUser.getUserId());
 		args.add("id_demande="+id_demande);
 		
 		sendJson(args);

@@ -2,11 +2,14 @@ package com.takeaphoto.activity;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,8 +26,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.googlecode.flickrjandroid.oauth.OAuth;
+
+import com.takeaphoto.flickr.FlickrHelper;
+import com.takeaphoto.flickr.OAuthTask;
 import com.takeaphoto.database.DemandesBDD;
+import com.takeaphoto.flickr.UploadPhotoFlickr;
 import com.takeaphoto.model.Demande;
+import com.takeaphoto.model.Reponse;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 
@@ -36,13 +45,19 @@ public class MapReponse extends SupportMapFragment {
 	private Activity mainActivity;
 	private GoogleMap gMap;
 	private User user;
+	private File photoFile;
+	private Context mContext;
+	private OAuth oauth;
+	private String lat;
+	private String lng;
 	
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		markers = new ArrayList<MarkerOptions>();
+		
+		Log.i("YATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "je suis passé par ici");
 	}
 
 	public void initialize(Activity main, DemandesBDD demandesBDD, User user) {
@@ -66,6 +81,36 @@ public class MapReponse extends SupportMapFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		Log.i("Upload","MapReponse onResume");
+		
+    	if (oauth == null || user == null) {
+            OAuthTask task = new OAuthTask(mainActivity.getApplicationContext());
+            task.execute();
+    	} else {
+    		if(photoFile!=null){
+	        	UploadPhotoFlickr task = new UploadPhotoFlickr(mainActivity.getApplicationContext(),oauth,photoFile);
+	            task.execute();
+
+				Log.i("lat", lat);
+				Log.i("lng", lng);
+				
+				DemandeServeur demandeServeur = new DemandeServeur();
+				List <Demande> demandes = demandeServeur.getDemandesByLatLng(mainActivity.getApplicationContext(), lat, lng);
+				
+	            Demande demande = demandes.get(0);
+	            Reponse reponse = new Reponse("frrfrefre",demande.getId());
+
+				demandeServeur.addReponse(mainActivity.getApplicationContext(),	demande, reponse);
+				
+				/*
+				demandesBDD.open();
+				demandesBDD.insertDemande(demande);
+				demandesBDD.close();
+				*/
+    		}
+    	}
+		
 		setUpMapIfNeeded();
 		updateDemandes();
 	}
@@ -82,8 +127,9 @@ public class MapReponse extends SupportMapFragment {
 
 			@Override
 			public boolean onMarkerClick(Marker arg0) {
+				lat = arg0.getPosition().latitude +"";
+				lng = arg0.getPosition().longitude +"";
 				dispatchTakePictureIntent();
-			 
 				return true;
 			}
 		});
@@ -94,7 +140,7 @@ public class MapReponse extends SupportMapFragment {
 	    // Ensure that there's a camera activity to handle the intent
 	    if (takePictureIntent.resolveActivity(this.getActivity().getPackageManager()) != null) {
 	        // Create the File where the photo should go
-	        File photoFile = null;
+	        photoFile = null;
 	        try {
 	            photoFile = createImageFile();
 	        } catch (IOException ex) {
@@ -113,14 +159,8 @@ public class MapReponse extends SupportMapFragment {
 	    // Create an image file name
 	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 	    String imageFileName = "JPEG_" + timeStamp + "_";
-	    File storageDir = Environment.getExternalStoragePublicDirectory(
-	            Environment.DIRECTORY_PICTURES);
-	    File image = File.createTempFile(
-	        imageFileName,  /* prefix */
-	        ".jpg",         /* suffix */
-	        storageDir      /* directory */
-	    );
-
+	    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+	    File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 	    // Save a file: path for use with ACTION_VIEW intents
 	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
 	    return image;
@@ -136,8 +176,7 @@ public class MapReponse extends SupportMapFragment {
 
 	private void updateDemandes() {
 		DemandeServeur demandeServeur = new DemandeServeur();
-		Log.i("LOL",mainActivity.getApplicationContext().getPackageName());
-		Log.i("LOL",this.user.getLogin());
+		
 		ArrayList<Demande> demandes = demandeServeur.getDemandesOthers(mainActivity.getApplicationContext(), this.user);
 
 		if (demandes != null) {
@@ -155,11 +194,18 @@ public class MapReponse extends SupportMapFragment {
 		}
 	}
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		View myFragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
 		return myFragmentView;
+	}
+
+	public void setmContext(Context mContext) {
+		this.mContext = mContext;
+	}
+
+	public void setOauth(Serializable oauth) {
+		this.oauth = (OAuth) oauth;
 	}
 }

@@ -40,56 +40,57 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 
     protected String doInBackground(ArrayList<String>...params){
     	HttpClient client = new DefaultHttpClient();
-		
+		Log.i("Ajout demande", "A");
 		HttpConnectionParams.setConnectionTimeout(client.getParams(), 1000);
 		HttpResponse response;
 		
 		// Cr�ation du tableau de donn�e a envoyer en POST
 		List<NameValuePair> postdata = new ArrayList<NameValuePair>();
-
+		Log.i("Ajout demande", "B");
 		try {
 			// On traite les arguments
 			args = params[0] ;
 			nomFichier = args.get(0) ;
-			String URL = "http://jules-vanneste.fr/takeaphotoforme/"
-					+ nomFichier;
-			
+			Log.i("Ajout demande", args.get(0));
+			String URL = "http://jules-vanneste.fr/takeaphotoforme/" + nomFichier;
+			Log.i("Ajout demande", "C");
 			for (int i = 1; i < args.size(); i++) {
-				String key = args.get(i).substring(0,
-						args.get(i).indexOf("="));
-				String value = args.get(i).substring(
-						args.get(i).indexOf("=") + 1, args.get(i).length());
-				
-				/* On encrypte le mot de passe */
-				if (key.equalsIgnoreCase("pass")) value = MCrypt.bytesToHex( SecuritySingleton.encrypt(value));
-				
+				String key = args.get(i).substring(0, args.get(i).indexOf("="));
+				String value = args.get(i).substring(args.get(i).indexOf("=") + 1, args.get(i).length());
+				System.out.println("key = " + key + " value = " + value);
 				postdata.add(new BasicNameValuePair(key, value));
 			}
+			Log.i("Ajout demande", "D");
 
 			// On envoit les donn�es en POST au serveur
 			HttpPost post = new HttpPost(URL);
 			post.setEntity(new UrlEncodedFormEntity(postdata));
-			System.out.println(response = client.execute(post));
-
+			response = client.execute(post);
+			System.out.println("client excute poste => " + response);
+			Log.i("Ajout demande", "E");
+			
 			// On pr�pare la r�ception de la r�ponse du serveur
 			InputStream inputStream = response.getEntity().getContent();
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(inputStream, "UTF-8"), 8);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
 			StringBuilder sb = new StringBuilder();
 			String line = null;
-			while ((line = reader.readLine()) != null)
+			Log.i("Ajout demande", "F");
+			while ((line = reader.readLine()) != null){
+				System.out.println("line = " + line);
 				sb.append(line + "\n");
-
+			}
+			Log.i("Ajout demande", "G");
+			
 			// On r�cup�re la r�ponse
 			response.getEntity().consumeContent();
 			String json = sb.toString();
-
-			JSONObject jsonObj = new JSONObject(json.substring(
-					json.indexOf("{"), json.lastIndexOf("}") + 1));
-
+			Log.i("Ajout demande", "H");
+			System.out.println("json = " + json);
+			JSONObject jsonObj = new JSONObject(json.substring(json.indexOf("{"), json.lastIndexOf("}") + 1));
+			Log.i("Ajout demande", "I");
 			// On verifie si il n'y a pas d'erreur
 			String result = jsonObj.getString("result");
-
+			Log.i("Ajout demande", "J");
 			if (result.contains("TRUE")) {
 				// Pour les demandes ont va remplir le tableau resultArray
 				if (nomFichier.equals("my_demandes.php") || nomFichier.equals("get_demandes_except_user.php") || nomFichier.equals("get_demande.php")) {
@@ -99,14 +100,19 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 				} else if (nomFichier.equals("del_demande.php") || nomFichier.equals("update_demande.php") ){
 					addInResultArray("result", "TRUE") ;
 				}
-				else
+				else{
+					Log.i("Ajout demande", "K");
 					addInResultArray("id", jsonObj.getString("id"));
+				}
 			} else {
+				Log.i("Ajout demande", "L");
 				addInResultArray("message", jsonObj.getString("message"));
 			}
-			
-			serveur.setResult(resultArray) ;
-			serveur.setRunning(false) ;
+			Log.i("Ajout demande", "M");
+			serveur.setResult(resultArray);
+			Log.i("Ajout demande", "N");
+			serveur.setRunning(false);
+			Log.i("Ajout demande", "O");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,7 +156,7 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 					String description = oneObject.getString("description");
 					String etat = oneObject.getString("etat");
 				
-					Demande demande = new Demande(Integer.parseInt(id_user),
+					Demande demande = new Demande(id_user,
 							Double.parseDouble(latitude),
 							Double.parseDouble(longitude), description);
 					demande.setId(Integer.parseInt(id_demande));

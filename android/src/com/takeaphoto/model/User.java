@@ -1,45 +1,35 @@
 package com.takeaphoto.model;
 
 public class User {
-	private int id;
-	private String login;
-	private String pass;
+	private String userId;
+	private String userName;
 
 	public User() {
 	}
 
-	public User(int id, String login, String pass) {
-		this.id = id;
-		this.login = login;
-		this.pass = pass;
+	public User(String userId, String userName) {
+		this.userId = userId;
+		this.userName = userName;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(String userId) {
+		this.userId = userId;
 	}
 
-	public String getLogin() {
-		return login;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public String getPass() {
-		return pass;
-	}
-
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
-
-	public int getId() {
-		return id;
+	public String getUserId() {
+		return userId;
 	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", login=" + login + ", pass=" + pass + "]";
+		return "User [userId=" + userId + ", userName=" + userName + "]";
 	}
 }
