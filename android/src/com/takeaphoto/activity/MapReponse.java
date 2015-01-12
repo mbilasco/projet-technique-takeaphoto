@@ -3,10 +3,16 @@ package com.takeaphoto.activity;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,9 +32,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.googlecode.flickrjandroid.Flickr;
+import com.googlecode.flickrjandroid.FlickrException;
+import com.googlecode.flickrjandroid.Parameter;
+import com.googlecode.flickrjandroid.REST;
+import com.googlecode.flickrjandroid.Transport;
 import com.googlecode.flickrjandroid.oauth.OAuth;
+import com.googlecode.flickrjandroid.photos.Photo;
+import com.googlecode.flickrjandroid.photos.PhotosInterface;
 
 import com.takeaphoto.flickr.FlickrHelper;
+import com.takeaphoto.flickr.GetPhotoInfoTask;
 import com.takeaphoto.flickr.OAuthTask;
 import com.takeaphoto.database.DemandesBDD;
 import com.takeaphoto.flickr.UploadPhotoFlickr;
@@ -90,24 +104,27 @@ public class MapReponse extends SupportMapFragment {
     	} else {
     		if(photoFile!=null){
 	        	UploadPhotoFlickr task = new UploadPhotoFlickr(mainActivity.getApplicationContext(),oauth,photoFile);
-	            task.execute();
-
-				Log.i("lat", lat);
-				Log.i("lng", lng);
 				
 				DemandeServeur demandeServeur = new DemandeServeur();
 				List <Demande> demandes = demandeServeur.getDemandesByLatLng(mainActivity.getApplicationContext(), lat, lng);
 				
 	            Demande demande = demandes.get(0);
-	            Reponse reponse = new Reponse("frrfrefre",demande.getId());
+	            String photoId = new String("");
+	            String url = new String("");
+	            try {
+	            	photoId = task.execute().get();
+	            	
+					Log.i("je suis de retouuuuuuuuuur", photoId);
+					GetPhotoInfoTask getInfoTask = new GetPhotoInfoTask(mainActivity.getApplicationContext(), oauth, photoId);
+					url = getInfoTask.execute().get();
+					Log.i("URL MA PHOTO", url);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				} 
+	            Reponse reponse = new Reponse(url, demande.getId());
 
 				demandeServeur.addReponse(mainActivity.getApplicationContext(),	demande, reponse);
-				
-				/*
-				demandesBDD.open();
-				demandesBDD.insertDemande(demande);
-				demandesBDD.close();
-				*/
     		}
     	}
 		

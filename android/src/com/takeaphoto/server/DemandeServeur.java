@@ -301,15 +301,21 @@ public class DemandeServeur extends Serveur{
 		args.add("lng=" + lng);
 		
 		sendJson(args);
+		Log.i("get get get get", "before running");
 		while(isRunning()){}
-		
+		Log.i("get get get get", "after running");
     	if(getResultArray() != null){
+    		Log.i("get get get get", "if");
 	    	for (String mapKey : getResultArray().keySet()) {
-	    		if(!mapKey.contains("result") && !mapKey.contains("id"))
-	    			resultTmp.add((Demande) getResultArray().get(mapKey)) ;
+	    		Log.i("get get get get", "for");	
+	    		if(!mapKey.contains("result") && !mapKey.contains("demande")){
+	    			Log.i("get get get get", "if");
+	    			resultTmp.add((Demande) getResultArray().get(mapKey));
+	    		}
+	    		Log.i("get get get get", ((Demande) getResultArray().get(mapKey)).toString());
 	    	}
     	}
-	    	
+    	
 	    setResultToFalse() ;
     	
 		return (resultTmp.size() == 0 ) ? null : resultTmp;

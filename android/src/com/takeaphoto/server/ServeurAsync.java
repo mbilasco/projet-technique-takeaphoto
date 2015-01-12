@@ -93,7 +93,7 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 			Log.i("Ajout demande", "J");
 			if (result.contains("TRUE")) {
 				// Pour les demandes ont va remplir le tableau resultArray
-				if (nomFichier.equals("my_demandes.php") || nomFichier.equals("get_demandes_except_user.php") || nomFichier.equals("get_demande.php")) {
+				if (nomFichier.equals("my_demandes.php") || nomFichier.equals("get_demandes_with_latlng.php") || nomFichier.equals("get_demandes_except_user.php") || nomFichier.equals("get_demande.php")) {
 					remplirResultArray("demande", jsonObj);
 				} else if (nomFichier.equals("get_photos.php")) {
 					remplirResultArray("url", jsonObj);
