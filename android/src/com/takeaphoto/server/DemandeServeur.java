@@ -2,25 +2,26 @@ package com.takeaphoto.server;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.takeaphoto.database.DemandesBDD;
+//import com.takeaphoto.database.DemandesBDD;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.Reponse;
 import com.takeaphoto.model.User;
 
 public class DemandeServeur extends Serveur{
-	static DemandesBDD demandeBdd = null ;
-	
+	//static DemandesBDD demandeBdd = null ;
+	/*
 	private void demandeBddIsSet(Context context){
 		if(demandeBdd == null)
 			demandeBdd = new DemandesBDD(context);
 	}
-	
-	public String addDemande(Context context, User currentUser, Demande demande) {
-		demandeBddIsSet(context);
+	*/
+	public String addDemande(User currentUser, Demande demande) {
+		//demandeBddIsSet(context);
 		String resultTmp = null;
 		
 		ArrayList<String> args = new ArrayList<String>();
@@ -40,7 +41,7 @@ public class DemandeServeur extends Serveur{
 				
 				setResultToFalse() ;
 				setRunning(true);
-				if(updateDemandeLocal(context, currentUser, id)){
+				if(updateDemandeLocal(currentUser, id)){
 					resultTmp = "ok";
 				}
 				else{
@@ -59,6 +60,28 @@ public class DemandeServeur extends Serveur{
 		
 	}
 	
+	public ArrayList<Demande> getDemandes(){
+		 ArrayList<Demande> demandes = new ArrayList<Demande>();
+		
+		 ArrayList<String> args = new ArrayList<String>() ;
+		 args.add("get_demandes.php") ;
+		 
+		 sendJson(args);
+		 while(isRunning()){}
+		 
+		 if(getResultArray() != null){
+			 for (String mapKey : getResultArray().keySet()) {
+				if(!mapKey.contains("result")){
+					demandes.add((Demande) getResultArray().get(mapKey));
+				}
+			 }
+		 }
+		 
+		 //setResultToFalse() ;
+		 return demandes;
+	}
+	
+	/*
 	public Demande getLocalDemandeWithId(Context context, int id_demande){
 		Demande demande = null ;
 		demandeBddIsSet(context) ;
@@ -69,7 +92,8 @@ public class DemandeServeur extends Serveur{
 		
 		return demande ;
 	}
-	
+	*/
+	/*
 	public ArrayList<Demande> getMyDemandesLocal(Context context, User currentUser){
 		demandeBddIsSet(context);
 		ArrayList<Demande> resultTmp = null;
@@ -80,14 +104,15 @@ public class DemandeServeur extends Serveur{
 		
 		return resultTmp;
 	}
-
+	*/
 	public ArrayList<Demande> getDemandesOthers(Context context, User currentUser) {
-		demandeBddIsSet(context) ;
+		//demandeBddIsSet(context) ;
 		ArrayList<Demande> resultTmp = new ArrayList<Demande>() ;
-		
+		/*
 		demandeBdd.open() ;
         demandeBdd.removeDemandeWithIdUser(currentUser.getUserId()) ; 
         demandeBdd.close() ;
+        */
         ArrayList<String> args = new ArrayList<String>() ;
         args.add("get_demandes_except_user.php") ;
 		args.add("idUser="+currentUser.getUserId());
@@ -101,9 +126,11 @@ public class DemandeServeur extends Serveur{
 	    			resultTmp.add((Demande) getResultArray().get(mapKey)) ;
 	    	}
     	}else{
+    		/*
     		demandeBdd.open() ;
     		resultTmp = demandeBdd.getDemandeWithIdUser(currentUser.getUserId()) ; 
     		demandeBdd.close() ;
+    		*/
     	}
 	    	
 	    setResultToFalse() ;
@@ -112,7 +139,7 @@ public class DemandeServeur extends Serveur{
 	}
 	
 	public String updateDemande(Context context, User currentUser, int id_demande, String name, String value ){
-		demandeBddIsSet(context) ;
+		//demandeBddIsSet(context) ;
 		String resultTmp = null ;
 		
 		ArrayList<String> args = new ArrayList<String>() ;
@@ -128,7 +155,7 @@ public class DemandeServeur extends Serveur{
 			if(getResultArray().containsKey("result") && getResultArray().get("result").toString().contains("TRUE")){
 				setResultToFalse() ;
 				setRunning(true) ;
-					if(updateDemandeLocal(context, currentUser, id_demande))
+					if(updateDemandeLocal(currentUser, id_demande))
 						resultTmp = "Votre demande a ete mise a jour" ;
 					else
 						resultTmp = "Erreur en local" ;
@@ -141,8 +168,8 @@ public class DemandeServeur extends Serveur{
 		return resultTmp ;
 	}
 	
-	public Boolean updateDemandeLocal(Context context, User currentUser, int id_demande){
-		demandeBddIsSet(context) ;
+	public Boolean updateDemandeLocal(User currentUser, int id_demande){
+		//demandeBddIsSet(context) ;
 		Boolean resultTmp = false ;
 		
 		 ArrayList<String> args = new ArrayList<String>() ;
@@ -155,23 +182,23 @@ public class DemandeServeur extends Serveur{
 	     if(getResultArray() != null){
 			 Demande demande = (Demande)getResultArray().get("0") ;
 			 if(demande != null){
-				 demandeBdd.open() ;
+			/*	 demandeBdd.open() ;
 				 if(demandeBdd.getDemandeWithId(demande.getId()) != null )
 					 demandeBdd.removeDemandeWithID(id_demande) ;
 				
 				 demandeBdd.insertDemande(demande) ;
 				 demandeBdd.close() ;
+			*/	 
 				 resultTmp = true;
 			 }
 		 }
 		 
 		 setResultToFalse() ;
-		 return resultTmp ;
-		 
+		 return resultTmp ;	 
 	}
 	
 	public void updateMyDemandesLocal(Context context, User currentUser){
-		demandeBddIsSet(context) ;
+		//demandeBddIsSet(context) ;
 				
 		ArrayList<String> args = new ArrayList<String>() ;
 		args.add("my_demandes.php") ;
@@ -181,22 +208,24 @@ public class DemandeServeur extends Serveur{
 		while(isRunning()){}
 			
 	    if(getResultArray() != null){
-			demandeBdd.open() ;
+			//demandeBdd.open() ;
 			for (String mapKey : getResultArray().keySet()) {
 				if(!mapKey.contains("result") && !mapKey.contains("id")){
+					/*
 					if(demandeBdd.getDemandeWithId(((Demande)getResultArray().get(mapKey)).getId()) == null){
 						demandeBdd.insertDemande((Demande)getResultArray().get(mapKey));
 					}
+					*/
 				}
 	    	}
-			demandeBdd.close() ;
+			//demandeBdd.close() ;
 		}
 		
 		setResultToFalse() ;
 	}
 
 	public String removeDemande(Context context, User currentUser, int id_demande){
-		demandeBddIsSet(context) ;
+		//demandeBddIsSet(context) ;
 		String resultTmp = null ;
 		
     	ArrayList<String> args = new ArrayList<String>() ;
@@ -208,10 +237,10 @@ public class DemandeServeur extends Serveur{
 		while(isRunning()){}
 	    if(getResultArray() != null){
 	    	if(getResultArray().containsKey("result") && getResultArray().get("result").toString().contains("TRUE")){
-					demandeBdd.open() ;
+				/*	demandeBdd.open() ;
 		    		demandeBdd.removeDemandeWithID(id_demande) ;
 		    		demandeBdd.close() ;
-						resultTmp = "Votre demande a ete supprimee" ;
+				*/		resultTmp = "Votre demande a ete supprimee" ;
 			}else
 				resultTmp = (String)getResultArray().get("message") ;
 		}else
@@ -223,11 +252,11 @@ public class DemandeServeur extends Serveur{
 	}
 	
 	public void uploadMedia(Context context, User currentUser, int id_demande, File file){
-		demandeBddIsSet(context) ;
-		
+		//demandeBddIsSet(context) ;
+		/*
 		demandeBdd.open() ;
 		demandeBdd.close() ;
-		
+		*/
 		ArrayList<String> args = new ArrayList<String>() ;
 		args.add("upload_media.php") ;
 		args.add("idUser="+currentUser.getUserId());
@@ -238,22 +267,23 @@ public class DemandeServeur extends Serveur{
 		while(isRunning()){}
 			
 	    if(getResultArray() != null){
-			demandeBdd.open() ;
+			//demandeBdd.open() ;
 			for (String mapKey : getResultArray().keySet()) {
 				if(!mapKey.contains("result") && !mapKey.contains("id")){
-					if(demandeBdd.getDemandeWithId(((Demande)getResultArray().get(mapKey)).getId()) == null){
+				/*	if(demandeBdd.getDemandeWithId(((Demande)getResultArray().get(mapKey)).getId()) == null){
 						demandeBdd.insertDemande((Demande)getResultArray().get(mapKey));
 					}
+				*/
 				}
 	    	}
-			demandeBdd.close() ;
+//			demandeBdd.close() ;
 		}
 		
 		setResultToFalse() ;
 	}
 	
 	public String addReponse(Context context, Demande demande, Reponse reponse) {
-		demandeBddIsSet(context);
+		//demandeBddIsSet(context);
 		String resultTmp = null;
 		
 		ArrayList<String> args = new ArrayList<String>();
@@ -292,7 +322,7 @@ public class DemandeServeur extends Serveur{
 	}
 	
 	public ArrayList<Demande> getDemandesByLatLng(Context context, String lat, String lng) {
-		demandeBddIsSet(context) ;
+		//demandeBddIsSet(context) ;
 		ArrayList<Demande> resultTmp = new ArrayList<Demande>() ;
 
         ArrayList<String> args = new ArrayList<String>() ;
@@ -301,18 +331,15 @@ public class DemandeServeur extends Serveur{
 		args.add("lng=" + lng);
 		
 		sendJson(args);
-		Log.i("get get get get", "before running");
+		
 		while(isRunning()){}
-		Log.i("get get get get", "after running");
+		
     	if(getResultArray() != null){
-    		Log.i("get get get get", "if");
+    		
 	    	for (String mapKey : getResultArray().keySet()) {
-	    		Log.i("get get get get", "for");	
 	    		if(!mapKey.contains("result") && !mapKey.contains("demande")){
-	    			Log.i("get get get get", "if");
 	    			resultTmp.add((Demande) getResultArray().get(mapKey));
 	    		}
-	    		Log.i("get get get get", ((Demande) getResultArray().get(mapKey)).toString());
 	    	}
     	}
     	

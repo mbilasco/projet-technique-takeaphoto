@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
-import com.takeaphoto.database.DemandesBDD;
+//import com.takeaphoto.database.DemandesBDD;
 
 /**
  * This shows how to create a simple activity with a map and a marker on the
@@ -42,7 +42,7 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	private GoogleMap gMap;
 	private MarkerOptions markerOptions;
 	private Activity mainActivity;
-	private DemandesBDD demandesBDD;
+//	private DemandesBDD demandesBDD;
 	private User user;
 
 	@Override
@@ -52,20 +52,20 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 		setHasOptionsMenu(true);
 	}
 
-	public void initialize(Activity main, DemandesBDD demandesBDD, User user) {
+	public void initialize(Activity main,/* DemandesBDD demandesBDD,*/ User user) {
 		this.setMainActivity(main);
-		this.setDemandeBDD(demandesBDD);
+	//	this.setDemandeBDD(demandesBDD);
 		this.setUser(user);
 	}
 
 	public void setMainActivity(Activity main) {
 		mainActivity = main;
 	}
-
+/*
 	public void setDemandeBDD(DemandesBDD demandesBDD) {
 		this.demandesBDD = demandesBDD;
 	}
-
+*/
 	public void setUser(User user) {
 		this.user = user;
 	}
@@ -164,12 +164,12 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 								Demande demande = new Demande(user.getUserId(),	markerOptions.getPosition().latitude, markerOptions.getPosition().longitude, markerOptions.getSnippet());
 								DemandeServeur demandeServeur = new DemandeServeur();
 
-								demandeServeur.addDemande(mainActivity.getApplicationContext(),	user, demande);
-			
+								demandeServeur.addDemande(user, demande);
+			/*
 								demandesBDD.open();
 								demandesBDD.insertDemande(demande);
 								demandesBDD.close();
-								Toast.makeText(mainActivity, "Votre demande a ete ajoutee",	Toast.LENGTH_SHORT).show();
+			*/					Toast.makeText(mainActivity, "Votre demande a ete ajoutee",	Toast.LENGTH_SHORT).show();
 
 								markerOptions = new MarkerOptions();
 								gMap.clear();
@@ -210,15 +210,12 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	}
 
 	@Override
-	public void onMarkerDrag(Marker marker) {
-	}
+	public void onMarkerDrag(Marker marker) {	}
 
 	@Override
-	public void onMarkerDragEnd(Marker marker) {
-	}
+	public void onMarkerDragEnd(Marker marker) {	}
 
 	@Override
-	public void onMarkerDragStart(Marker marker) {
-	}
+	public void onMarkerDragStart(Marker marker) {	  }
 
 }

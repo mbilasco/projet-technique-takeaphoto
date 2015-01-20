@@ -44,7 +44,7 @@ import com.googlecode.flickrjandroid.photos.PhotosInterface;
 import com.takeaphoto.flickr.FlickrHelper;
 import com.takeaphoto.flickr.GetPhotoInfoTask;
 import com.takeaphoto.flickr.OAuthTask;
-import com.takeaphoto.database.DemandesBDD;
+//import com.takeaphoto.database.DemandesBDD;
 import com.takeaphoto.flickr.UploadPhotoFlickr;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.Reponse;
@@ -55,7 +55,7 @@ public class MapReponse extends SupportMapFragment {
 	static final int REQUEST_TAKE_PHOTO = 1;
 	private ArrayList<MarkerOptions> markers;
 	private String mCurrentPhotoPath;
-	private DemandesBDD demandesBDD;
+//	private DemandesBDD demandesBDD;
 	private Activity mainActivity;
 	private GoogleMap gMap;
 	private User user;
@@ -64,30 +64,30 @@ public class MapReponse extends SupportMapFragment {
 	private OAuth oauth;
 	private String lat;
 	private String lng;
+	private ArrayList<Demande> demandes;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		markers = new ArrayList<MarkerOptions>();
-		
-		Log.i("YATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "je suis passé par ici");
 	}
 
-	public void initialize(Activity main, DemandesBDD demandesBDD, User user) {
+	public void initialize(Activity main,/* DemandesBDD demandesBDD,*/ User user) {
 		this.setMainActivity(main);
-		this.setDemandeBDD(demandesBDD);
+//		this.setDemandeBDD(demandesBDD);
 		this.setUser(user);
+		
 	}
 
 	public void setMainActivity(Activity main) {
 		mainActivity = main;
 	}
-
+/*
 	public void setDemandeBDD(DemandesBDD demandesBDD) {
 		this.demandesBDD = demandesBDD;
 	}
-
+*/
 	public void setUser(User user) {
 		this.user = user;
 	}
@@ -129,7 +129,7 @@ public class MapReponse extends SupportMapFragment {
     	}
 		
 		setUpMapIfNeeded();
-		updateDemandes();
+		updateMap();
 	}
 
 	private void setUpMapIfNeeded() {
@@ -182,7 +182,7 @@ public class MapReponse extends SupportMapFragment {
 	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
 	    return image;
 	}
-	
+	/*
 	private void demandeAddPic(int id_demande) {
 	    File f = new File(mCurrentPhotoPath);
 	    Uri contentUri = Uri.fromFile(f);
@@ -190,20 +190,14 @@ public class MapReponse extends SupportMapFragment {
 	    DemandeServeur demandeServeur = new DemandeServeur();
 	    demandeServeur.uploadMedia(mainActivity.getApplicationContext(), this.user, id_demande, tmp);
 	}
-
-	private void updateDemandes() {
-		DemandeServeur demandeServeur = new DemandeServeur();
-		
-		ArrayList<Demande> demandes = demandeServeur.getDemandesOthers(mainActivity.getApplicationContext(), this.user);
-
-		if (demandes != null) {
-			for (Demande d : demandes) {
-				MarkerOptions m = new MarkerOptions();
-				m.title("Demande de + TODO...");
-				m.position(new LatLng(d.getLat(), d.getLng()));
-				m.snippet(d.getDescription());
-				markers.add(m);
-			}
+	*/
+	private void updateMap() {
+		for (Demande d : demandes) {
+			MarkerOptions m = new MarkerOptions();
+			m.title("Demande de + TODO...");
+			m.position(new LatLng(d.getLat(), d.getLng()));
+			m.snippet(d.getDescription());
+			markers.add(m);
 		}
 
 		for (MarkerOptions m : markers) {
@@ -224,5 +218,13 @@ public class MapReponse extends SupportMapFragment {
 
 	public void setOauth(Serializable oauth) {
 		this.oauth = (OAuth) oauth;
+	}
+	
+	public ArrayList<Demande> getDemandes() {
+		return demandes;
+	}
+
+	public void setDemandes(ArrayList<Demande> demandes) {
+		this.demandes = demandes;
 	}
 }

@@ -1,3 +1,4 @@
+/*
 package com.takeaphoto.database;
 
 import android.content.Context;
@@ -47,6 +48,6 @@ public class Base extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 }
-
+*/
 
 

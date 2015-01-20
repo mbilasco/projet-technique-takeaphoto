@@ -11,16 +11,17 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 
-import com.takeaphoto.database.DemandesBDD;
+//import com.takeaphoto.database.DemandesBDD;
 
+import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 import com.takeaphoto.utils.CustomViewPager;
 
-public class MainActivity extends FragmentActivity implements
-		ActionBar.TabListener {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private CustomViewPager mViewPager;
@@ -28,13 +29,18 @@ public class MainActivity extends FragmentActivity implements
 	private MapAdd mapAdd = new MapAdd();
 	private MapReponse mapRep = new MapReponse();
 	private User user;
+	
+	private ArrayList<Demande> demandes;
+	private ArrayList<Demande> demandesCurrentUser;
+	private ArrayList<Demande> demandesOtherUsers;
+	
 	final int NB_ONGLET = 3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		DemandesBDD demandesBDD = new DemandesBDD(this);
+	//	DemandesBDD demandesBDD = new DemandesBDD(this);
 		/*
 		UserBDD userBDD = new UserBDD(this);
 		userBDD.open();
@@ -43,16 +49,39 @@ public class MainActivity extends FragmentActivity implements
 		User user = tmp.get(0);
 		userBDD.close();
 		*/
-		mapAdd.setDemandeBDD(demandesBDD);
-		mapRep.setDemandeBDD(demandesBDD);
+	//	mapAdd.setDemandeBDD(demandesBDD);
+	//	mapRep.setDemandeBDD(demandesBDD);
 		mapAdd.setMainActivity(this);
 		mapRep.setMainActivity(this);
+		
 		user = new User(this.getIntent().getStringExtra("USER_ID"),this.getIntent().getStringExtra("USER_NAME"));
 		manager.setUser(user);
 		mapAdd.setUser(user);
 		mapRep.setUser(user);
+		
 		mapRep.setmContext(this);
 		mapRep.setOauth(this.getIntent().getSerializableExtra("OAUTH"));
+		
+		demandes = new DemandeServeur().getDemandes();
+		demandesCurrentUser = new ArrayList<Demande>();
+		demandesOtherUsers = new ArrayList<Demande>();
+		
+		Log.i("current user : ", user.getUserId()+"");	
+		
+		for(int i=0; i<demandes.size(); i++){
+			Log.i("other user : ", demandes.get(i).getUserId()+"");	
+			if(demandes.get(i).getUserId().compareTo(user.getUserId())==0){
+				demandesCurrentUser.add(demandes.get(i));
+			}
+			else{
+				demandesOtherUsers.add(demandes.get(i));
+			}
+		}
+		
+		mapRep.setDemandes(demandesOtherUsers);
+		manager.setDemandes(demandesCurrentUser);
+		Log.i("autres demandes taille : ", demandesOtherUsers.size()+"");	
+		Log.i("mes demandes taille : ", demandesCurrentUser.size()+"");		
 		
 		// Set up the action bar.
 		final ActionBar actionBar = this.getActionBar();
@@ -62,8 +91,7 @@ public class MainActivity extends FragmentActivity implements
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (CustomViewPager) findViewById(R.id.photosViewPager);
@@ -72,8 +100,7 @@ public class MainActivity extends FragmentActivity implements
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
-		mViewPager
-				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
 						actionBar.setSelectedNavigationItem(position);

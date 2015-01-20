@@ -45,10 +45,16 @@ public class ManagerActivity extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		setHasOptionsMenu(true);
-
+/*
 		if (demandes == null) {
 			updateDemandes();
 		}
+*/	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		actualiserListeDemande();
 	}
 
 	public void setUser(User user) {
@@ -66,10 +72,12 @@ public class ManagerActivity extends ListFragment {
 
 	public void actualiserListeDemande() {
 		if (this.user != null) {
-			demandes = new DemandeServeur().getMyDemandesLocal(getActivity(), this.user);
-
+			//demandes = new DemandeServeur().getMyDemandesLocal(getActivity(), this.user);
+			
 			if (demandes != null) {
 				// Each row in the list stores country name, currency and flag
+				Log.i("actu", demandes.size()+"");
+				
 				List<HashMap<String, String>> aList = new ArrayList<HashMap<String, String>>();
 
 				String[] Descriptions = new String[demandes.size()];
@@ -110,8 +118,7 @@ public class ManagerActivity extends ListFragment {
 
 				// Instantiating an adapter to store each items
 				// R.layout.listview_layout defines the layout of each item
-				SimpleAdapter adapter = new SimpleAdapter(getActivity()
-						.getBaseContext(), aList, R.layout.listview, from, to);
+				SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aList, R.layout.listview, from, to);
 
 				setListAdapter(adapter);
 			} else
@@ -270,31 +277,37 @@ public class ManagerActivity extends ListFragment {
 	}
 
 	private void choixEtat(final int id_demande) {
-		Demande demande = new DemandeServeur().getLocalDemandeWithId(
-				getActivity(), id_demande);
-		if (demande.getEtat() == 1) {
-			AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-			ImageView iv = new ImageView(getActivity());
-			alert.setView(iv);
-			alert.setTitle("Voulez-vous d'autres photos pour cette demande ?");
-
-			alert.setPositiveButton("Oui", new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-
-				}
-			});
-
-			alert.setNegativeButton("Non", new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					new DemandeServeur().updateDemande(getActivity(), user,
-							id_demande, "etat", "2");
-					actualiserListeDemande();
-				}
-			});
-
-			alert.show();
+		Demande demande = null;
+		
+		for(int i=0; i<demandes.size(); i++){
+			if(demandes.get(i).getId()==id_demande){
+				demande=demandes.get(i);
+			}
+		}
+		if(demande!=null){
+			if (demande.getEtat() == 1) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+				ImageView iv = new ImageView(getActivity());
+				alert.setView(iv);
+				alert.setTitle("Voulez-vous d'autres photos pour cette demande ?");
+	
+				alert.setPositiveButton("Oui", new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+	
+					}
+				});
+	
+				alert.setNegativeButton("Non", new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						new DemandeServeur().updateDemande(getActivity(), user,	id_demande, "etat", "2");
+						actualiserListeDemande();
+					}
+				});
+	
+				alert.show();
+			}
 		}
 	}
 
@@ -349,5 +362,13 @@ public class ManagerActivity extends ListFragment {
 		}
 
 		actualiserListeDemande();
+	}
+
+	public ArrayList<Demande> getDemandes() {
+		return demandes;
+	}
+
+	public void setDemandes(ArrayList<Demande> demandes) {
+		this.demandes = demandes;
 	}
 }

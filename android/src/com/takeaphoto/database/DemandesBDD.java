@@ -1,3 +1,4 @@
+/*
 package com.takeaphoto.database;
 
 import java.util.ArrayList;
@@ -150,3 +151,4 @@ public class DemandesBDD {
 		return demandes;
 	}
 }
+*/

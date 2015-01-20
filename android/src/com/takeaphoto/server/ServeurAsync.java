@@ -99,6 +99,8 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 					remplirResultArray("url", jsonObj);
 				} else if (nomFichier.equals("del_demande.php") || nomFichier.equals("update_demande.php") ){
 					addInResultArray("result", "TRUE") ;
+				} else if(nomFichier.equals("get_demandes.php")) {
+					remplirResultArray("demandes", jsonObj);
 				}
 				else{
 					Log.i("Ajout demande", "K");
