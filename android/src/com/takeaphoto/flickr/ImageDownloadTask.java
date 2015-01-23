@@ -7,6 +7,7 @@ import com.takeaphoto.flickr.ImageUtils.DownloadedDrawable;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -41,17 +42,14 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
                         result = null;
                         return;
                 }
-
+                Log.i("onPostExecute Download","a");
                 ImageCache.saveToCache(this.mUrl, result);
                 if (imgRef != null) {
+                	Log.i("onPostExecute Download","b");
                         ImageView imageView = imgRef.get();
                         ImageDownloadTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
-                        // Change bitmap only if this process is still associated with it
-                        // Or if we don't use any bitmap to task association
-                        // (NO_DOWNLOADED_DRAWABLE mode)
-                        if (this == bitmapDownloaderTask && bitmapDownloaderTask != null ) {
-                                imageView.setImageBitmap(result);
-                        }
+                      	Log.i("onPostExecute Download","c");
+                        imageView.setImageBitmap(result);
                 }
 
         }
@@ -73,13 +71,13 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
          *         with this imageView. null if there is no such task.
          */
         private ImageDownloadTask getBitmapDownloaderTask(ImageView imageView) {
-                if (imageView != null) {
-                        Drawable drawable = imageView.getDrawable();
-                        if (drawable instanceof DownloadedDrawable) {
-                                DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
-                                return downloadedDrawable.getBitmapDownloaderTask();
-                        }
-                }
-                return null;
+            if (imageView != null) {
+                    Drawable drawable = imageView.getDrawable();
+                    if (drawable instanceof DownloadedDrawable) {
+                            DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
+                            return downloadedDrawable.getBitmapDownloaderTask();
+                    }
+            }
+            return null;
         }
 }

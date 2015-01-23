@@ -52,14 +52,14 @@ import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 
 public class MapReponse extends SupportMapFragment {
-	static final int REQUEST_TAKE_PHOTO = 1;
+//	static final int REQUEST_TAKE_PHOTO = 1;
 	private ArrayList<MarkerOptions> markers;
-	private String mCurrentPhotoPath;
+//	private String mCurrentPhotoPath;
 //	private DemandesBDD demandesBDD;
 	private Activity mainActivity;
 	private GoogleMap gMap;
 	private User user;
-	private File photoFile;
+
 	private Context mContext;
 	private OAuth oauth;
 	private String lat;
@@ -97,7 +97,7 @@ public class MapReponse extends SupportMapFragment {
 		super.onResume();
 
 		Log.i("Upload","MapReponse onResume");
-		
+		/*
     	if (oauth == null || user == null) {
             OAuthTask task = new OAuthTask(mainActivity.getApplicationContext());
             task.execute();
@@ -125,9 +125,10 @@ public class MapReponse extends SupportMapFragment {
 	            Reponse reponse = new Reponse(url, demande.getId());
 
 				demandeServeur.addReponse(mainActivity.getApplicationContext(),	demande, reponse);
+				demandeServeur.updateEtatDemande(demande.getId(), 1);
     		}
     	}
-		
+		*/
 		setUpMapIfNeeded();
 		updateMap();
 	}
@@ -146,12 +147,19 @@ public class MapReponse extends SupportMapFragment {
 			public boolean onMarkerClick(Marker arg0) {
 				lat = arg0.getPosition().latitude +"";
 				lng = arg0.getPosition().longitude +"";
-				dispatchTakePictureIntent();
+				
+				Intent intent = new Intent(mainActivity.getApplicationContext(), VisualisationDemande.class);
+	            intent.putExtra("LAT_VALUE", lat);
+	            intent.putExtra("LNG_VALUE", lng);
+	            intent.putExtra("OAUTH_VALUE", 	oauth);
+				startActivity(intent);
+				
+				//dispatchTakePictureIntent();
 				return true;
 			}
 		});
 	}
-	
+	/*
 	private void dispatchTakePictureIntent() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    // Ensure that there's a camera activity to handle the intent
@@ -170,8 +178,8 @@ public class MapReponse extends SupportMapFragment {
 	            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
 	        }
 	    }
-	}
-
+	}*/
+/*
 	private File createImageFile() throws IOException {
 	    // Create an image file name
 	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -182,6 +190,7 @@ public class MapReponse extends SupportMapFragment {
 	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
 	    return image;
 	}
+	*/
 	/*
 	private void demandeAddPic(int id_demande) {
 	    File f = new File(mCurrentPhotoPath);

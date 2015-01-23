@@ -105,6 +105,7 @@ public class DemandeServeur extends Serveur{
 		return resultTmp;
 	}
 	*/
+	
 	public ArrayList<Demande> getDemandesOthers(Context context, User currentUser) {
 		//demandeBddIsSet(context) ;
 		ArrayList<Demande> resultTmp = new ArrayList<Demande>() ;
@@ -346,5 +347,58 @@ public class DemandeServeur extends Serveur{
 	    setResultToFalse() ;
     	
 		return (resultTmp.size() == 0 ) ? null : resultTmp;
+	}
+	
+	public String updateEtatDemande(int id_demande, int etat){
+		String resultTmp = null ;
+		
+		ArrayList<String> args = new ArrayList<String>() ;
+		args.add("update_etat_demande.php") ;
+		args.add("id_demande=" + id_demande);
+		args.add("etat=" + etat);
+		
+		sendJson(args);
+		while(isRunning()){}
+		
+    	if(getResultArray() != null){
+			if(getResultArray().containsKey("result") && getResultArray().get("result").toString().contains("TRUE")){
+				setResultToFalse() ;
+				setRunning(true) ;
+				
+			}else
+			resultTmp = "Erreur distante" ;
+		}
+		
+    	setResultToFalse() ;
+    	
+		return resultTmp ;
+	}
+	
+	public ArrayList <Reponse> getURLPhotoReponse(int id_demande){
+		ArrayList <Reponse> resultTmp = new ArrayList<Reponse>() ;
+		
+		ArrayList<String> args = new ArrayList<String>() ;
+		args.add("get_url_photo_demande.php") ;
+		args.add("id_demande=" + id_demande);
+		Log.i("yaya", "coucou");
+		sendJson(args);
+		while(isRunning()){}
+		Log.i("yaya", "beuuuuh");
+		
+    	if(getResultArray() != null){
+			Log.i("yaya", "beuuuuh X2");
+			Log.i("yaya", getResultArray().toString());
+			for (String mapKey : getResultArray().keySet()) {
+				Log.i("yaya", "beuuuuh X3");
+				if(!mapKey.contains("result") && !mapKey.contains("reponses")){
+					resultTmp.add((Reponse) getResultArray().get(mapKey));	
+					Log.i("yaya", ((Reponse) getResultArray().get(mapKey)).toString());
+				}
+			}
+		}
+		
+    	//setResultToFalse() ;
+    	
+    	return (resultTmp.size() == 0 ) ? null : resultTmp;
 	}
 }

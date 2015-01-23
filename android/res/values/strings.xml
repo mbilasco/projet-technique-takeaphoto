@@ -25,5 +25,12 @@
     <string name="erreur_current_user">"Erreur Utilisateur Courant"</string>
     <string name="zoomInf">"-"</string>
     <string name="zoomSup">"+"</string>    
-    <string name="title_activity_login_display">name</string> 
+    <string name="title_activity_login_display">TAP</string>    
+    <string name="prendre_photo">Prendre Photo</string>    
+    <string name="str_lat">"Latitude : "</string>    
+    <string name="str_lng">"Longitude : "</string>    
+    <string name="str_desc">"Description : "</string>    
+    <string name="str_lat_value">0.00</string>    
+    <string name="str_lng_value">0.00</string>    
+    <string name="str_desc_value">Ici, la description de la demande saisie par un utilisateur</string> 
 </resources>

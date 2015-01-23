@@ -21,8 +21,7 @@ public class LoadPhotostreamTask extends AsyncTask<OAuth, Void, PhotoList> {
         /**
          * @param flickrjAndroidSampleActivity
          */
-        public LoadPhotostreamTask(Activity activity,
-                        ListView listView) {
+        public LoadPhotostreamTask(Activity activity, ListView listView) {
                 this.activity = activity;
                 this.listView = listView;
         }

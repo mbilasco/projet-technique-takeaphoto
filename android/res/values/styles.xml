@@ -1,5 +1,9 @@
 <resources>
     <style name="AppTheme" parent="android:Theme.Light">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme2" parent="android:Theme.Light">
         <item name="android:windowActionBar">true</item>
     </style>
 </resources>

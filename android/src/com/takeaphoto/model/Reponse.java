@@ -7,6 +7,13 @@ public class Reponse {
 	
 	public Reponse() {	}
 
+	public Reponse(int id_reponse, String url, int id_demande) {
+		super();
+		this.id = id_reponse;
+		this.url = url;
+		this.id_demande = id_demande;
+	}
+	
 	public Reponse(String url, int id_demande) {
 		super();
 		this.url = url;

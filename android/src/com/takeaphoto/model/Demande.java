@@ -15,7 +15,7 @@ public class Demande {
 		this.lat = lat ;
 		this.lng = lng ;
 		this.description = description;
-		this.etat = 0 ;
+		this.etat = 2;
 	}
 
 	public int getId() {

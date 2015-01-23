@@ -23,6 +23,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.takeaphoto.model.Demande;
+import com.takeaphoto.model.Reponse;
 import com.takeaphoto.utils.MCrypt;
 
 class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
@@ -90,6 +91,7 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 			Log.i("Ajout demande", "I");
 			// On verifie si il n'y a pas d'erreur
 			String result = jsonObj.getString("result");
+						
 			Log.i("Ajout demande", "J");
 			if (result.contains("TRUE")) {
 				// Pour les demandes ont va remplir le tableau resultArray
@@ -97,10 +99,14 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 					remplirResultArray("demande", jsonObj);
 				} else if (nomFichier.equals("get_photos.php")) {
 					remplirResultArray("url", jsonObj);
-				} else if (nomFichier.equals("del_demande.php") || nomFichier.equals("update_demande.php") ){
+				} else if (nomFichier.equals("del_demande.php") || nomFichier.equals("update_demande.php") || nomFichier.equals("update_etat_demande.php")){
 					addInResultArray("result", "TRUE") ;
 				} else if(nomFichier.equals("get_demandes.php")) {
 					remplirResultArray("demandes", jsonObj);
+				} else if(nomFichier.equals("get_url_photo_demande.php")) {
+					Log.i("Ajout demande", "k");
+					Log.i("Ajout demande", jsonObj.toString());
+					remplirResultArray("reponses", jsonObj);
 				}
 				else{
 					Log.i("Ajout demande", "K");
@@ -158,12 +164,18 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 					String description = oneObject.getString("description");
 					String etat = oneObject.getString("etat");
 				
-					Demande demande = new Demande(id_user,
-							Double.parseDouble(latitude),
-							Double.parseDouble(longitude), description);
+					Demande demande = new Demande(id_user, Double.parseDouble(latitude), Double.parseDouble(longitude), description);
 					demande.setId(Integer.parseInt(id_demande));
 					demande.setEtat(Integer.parseInt(etat));
 					resultArray.put(String.valueOf(i), demande);
+				}
+				else if (key.contains("reponses")) {
+					int id_reponse = oneObject.getInt("id_reponse");
+					String url = oneObject.getString("url");
+					int id_demande = oneObject.getInt("id_demande");
+				
+					Reponse reponse = new Reponse(id_reponse, url, id_demande);
+					resultArray.put(String.valueOf(i), reponse);
 				}
 			}
 		}

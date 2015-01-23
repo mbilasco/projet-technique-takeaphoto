@@ -13,6 +13,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +32,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.takeaphoto.model.Demande;
+import com.takeaphoto.model.Reponse;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 import com.takeaphoto.server.PhotoServeur;
@@ -88,7 +90,7 @@ public class ManagerActivity extends ListFragment {
 
 					switch (demandes.get(i).getEtat()) {
 						case 0:
-							images[i] = R.drawable.vert;
+							images[i] = R.drawable.rouge;
 							break;
 	
 						case 1:
@@ -96,7 +98,7 @@ public class ManagerActivity extends ListFragment {
 							break;
 	
 						case 2:
-							images[i] = R.drawable.rouge;
+							images[i] = R.drawable.vert;
 							break;
 						default:
 							break;
@@ -150,6 +152,9 @@ public class ManagerActivity extends ListFragment {
 		final int id_demande = demandes.get(position).getId();
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 		int etat = demandes.get(position).getEtat();
+		
+		Log.i("reponse serveur","0");
+		
 		if (etat == 0) {
 			alert.setTitle("Demande : " + demandes.get(position).getDescription());
 			alert.setPositiveButton("Modifier Description", new OnClickListener() {
@@ -170,29 +175,47 @@ public class ManagerActivity extends ListFragment {
 			});
 
 			alert.show();
-		} else if (etat == 1 || etat == 2) {
-			ArrayList<Object> result = new PhotoServeur().getUrls(this.user,id_demande);
+		} else {
+			Log.i("reponse serveur","1");
+		//	ArrayList<Object> result = new PhotoServeur().getUrls(this.user,id_demande);
+			
+			DemandeServeur demandeServeur = new DemandeServeur();
+			ArrayList<Reponse> result = demandeServeur.getURLPhotoReponse(id_demande);
+			Log.i("reponse serveur","2");
+			Log.i("result", result.get(0).toString());
 			if (result != null) {
+				Log.i("reponse serveur","3");
 				photos = new ArrayList<Bitmap>();
 				nbPhotos = result.size();
 				nbPhotosCurrent = 0;
-				for (Object url : result) {
-					new getPhoto().execute((String) url, id_demande + "");
-				}
+				/*for (Reponse reponse : result) {
+					Log.i("reponse serveur",reponse.toString());
+					new getPhoto().execute(reponse.getId_demande()+"", reponse.getUrl());
+				}*/
+				/*
+				Log.i("reponse serveur",result.get(0).toString());
+				new getPhoto().execute(result.get(0).getId_demande()+"", result.get(0).getUrl());
+				*/
+				Intent intent = new Intent(getActivity(), VisualisationPhoto.class);
+				intent.putExtra("URL_PHOTO", result.get(0).getUrl());
+				intent.putExtra("ID_DEMANDE", result.get(0).getId_demande());
+				startActivity(intent);
 			}
 		}
 	}
 
 	public class getPhoto extends AsyncTask<String, Integer, Bitmap> {
 		volatile int id_demande;
-
+		
 		@Override
 		protected Bitmap doInBackground(String... args) {
-			id_demande = Integer.parseInt(args[1]);
-			String url = "http://jules-vanneste.fr/takeaphotoforme/" + args[0];
+			Log.i("reponse serveur","Z");
+			id_demande = Integer.parseInt(args[0]);
+			String url = args[1];
 			Bitmap bmp = null;
 
 			try {
+				Log.i("reponse serveur","Y");
 				URLConnection conn = null;
 				URL u = new URL(url);
 				conn = u.openConnection();
@@ -200,11 +223,12 @@ public class ManagerActivity extends ListFragment {
 				httpConn.setRequestMethod("GET");
 				httpConn.connect();
 				InputStream is = null;
-
+				Log.i("reponse serveur","X");
 				if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					is = httpConn.getInputStream();
 					int thisLine;
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					Log.i("reponse serveur","V");
 					while ((thisLine = is.read()) != -1) {
 						bos.write(thisLine);
 					}
@@ -214,7 +238,7 @@ public class ManagerActivity extends ListFragment {
 					if (bos != null) {
 						bos.close();
 					}
-
+					Log.i("reponse serveur","Q");
 					bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
 					return bmp;
 				}
@@ -235,7 +259,9 @@ public class ManagerActivity extends ListFragment {
 		protected void onPostExecute(Bitmap bmp) {
 			photos.add(bmp);
 			nbPhotosCurrent++;
+			Log.i("post execute", "a");
 			if (nbPhotos == nbPhotosCurrent) {
+				Log.i("post execute", "b");
 				nbPhotosCurrent = 0;
 				afficherPhotos(id_demande);
 			}

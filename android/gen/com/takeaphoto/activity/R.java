@@ -28,43 +28,51 @@ public final class R {
     }
     public static final class drawable {
         public static final int android=0x7f020000;
-        public static final int bg=0x7f020001;
-        public static final int ic_action_search=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int ic_oauth_yahoo=0x7f020004;
-        public static final int jaune=0x7f020005;
-        public static final int marker=0x7f020006;
-        public static final int rouge=0x7f020007;
-        public static final int vert=0x7f020008;
+        public static final int app_logo=0x7f020001;
+        public static final int bg=0x7f020002;
+        public static final int ic_action_search=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int ic_launcher_app=0x7f020005;
+        public static final int ic_launcher_tap=0x7f020006;
+        public static final int ic_logo_tap=0x7f020007;
+        public static final int ic_oauth_yahoo=0x7f020008;
+        public static final int ic_photo=0x7f020009;
+        public static final int jaune=0x7f02000a;
+        public static final int logo=0x7f02000b;
+        public static final int marker=0x7f02000c;
+        public static final int photoview=0x7f02000d;
+        public static final int rouge=0x7f02000e;
+        public static final int vert=0x7f02000f;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000f;
-        public static final int connect=0x7f090004;
-        public static final int create_account=0x7f090003;
-        public static final int image=0x7f09000c;
-        public static final int imageView1=0x7f090005;
-        public static final int loadingSignIn=0x7f090006;
-        public static final int loadinglabel=0x7f090007;
-        public static final int map=0x7f090009;
-        public static final int menu_save=0x7f090010;
-        public static final int menu_settings=0x7f09000e;
-        public static final int photosViewPager=0x7f090008;
-        public static final int section_label=0x7f09000b;
-        public static final int surfaceViewCamera=0x7f09000a;
-        public static final int txt=0x7f09000d;
-        public static final int user_email=0x7f090000;
-        public static final int user_password=0x7f090001;
-        public static final int user_password2=0x7f090002;
+        public static final int action_settings=0x7f090011;
+        public static final int button_take_photo=0x7f09000c;
+        public static final int desc_value=0x7f09000b;
+        public static final int image=0x7f09000e;
+        public static final int imageView1=0x7f090001;
+        public static final int imageView2=0x7f090000;
+        public static final int latitude_value=0x7f090007;
+        public static final int loadingSignIn=0x7f090002;
+        public static final int loadinglabel=0x7f090003;
+        public static final int longitude_value=0x7f090009;
+        public static final int map=0x7f090005;
+        public static final int menu_save=0x7f090012;
+        public static final int menu_settings=0x7f090010;
+        public static final int photosViewPager=0x7f090004;
+        public static final int section_label=0x7f09000d;
+        public static final int textView1=0x7f090006;
+        public static final int textView2=0x7f090008;
+        public static final int textView3=0x7f09000a;
+        public static final int txt=0x7f09000f;
     }
     public static final class layout {
-        public static final int activity_create=0x7f030000;
-        public static final int activity_login=0x7f030001;
-        public static final int activity_login_flickr=0x7f030002;
-        public static final int activity_main=0x7f030003;
-        public static final int activity_map=0x7f030004;
-        public static final int activity_photo=0x7f030005;
-        public static final int fragment_main_dummy=0x7f030006;
-        public static final int listview=0x7f030007;
+        public static final int activity_login_flickr=0x7f030000;
+        public static final int activity_main=0x7f030001;
+        public static final int activity_map=0x7f030002;
+        public static final int activity_photo=0x7f030003;
+        public static final int activity_view_demande=0x7f030004;
+        public static final int fragment_main_dummy=0x7f030005;
+        public static final int listview=0x7f030006;
     }
     public static final class menu {
         public static final int login=0x7f080000;
@@ -90,6 +98,13 @@ public final class R {
         public static final int menu_settings=0x7f060001;
         public static final int pass_min=0x7f06000d;
         public static final int password=0x7f060005;
+        public static final int prendre_photo=0x7f06001b;
+        public static final int str_desc=0x7f06001e;
+        public static final int str_desc_value=0x7f060021;
+        public static final int str_lat=0x7f06001c;
+        public static final int str_lat_value=0x7f06001f;
+        public static final int str_lng=0x7f06001d;
+        public static final int str_lng_value=0x7f060020;
         public static final int textview=0x7f060014;
         public static final int title_activity_display=0x7f060007;
         public static final int title_activity_login_display=0x7f06001a;
@@ -102,5 +117,6 @@ public final class R {
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;
+        public static final int AppTheme2=0x7f070001;
     }
 }
