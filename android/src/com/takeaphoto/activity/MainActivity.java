@@ -78,7 +78,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				demandesOtherUsers.add(demandes.get(i));
 			}
 		}
-		
+		mapAdd.setDemandes(demandesCurrentUser);
 		mapRep.setDemandes(demandesOtherUsers);
 		manager.setDemandes(demandesCurrentUser);
 		Log.i("autres demandes taille : ", demandesOtherUsers.size()+"");	

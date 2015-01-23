@@ -1,5 +1,7 @@
 package com.takeaphoto.activity;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -44,7 +46,8 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	private Activity mainActivity;
 //	private DemandesBDD demandesBDD;
 	private User user;
-
+	private ArrayList<Demande> demandes;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -165,6 +168,7 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 								DemandeServeur demandeServeur = new DemandeServeur();
 
 								demandeServeur.addDemande(user, demande);
+								demandes.add(demande);
 			/*
 								demandesBDD.open();
 								demandesBDD.insertDemande(demande);
@@ -218,4 +222,11 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	@Override
 	public void onMarkerDragStart(Marker marker) {	  }
 
+	public ArrayList<Demande> getDemandes() {
+		return demandes;
+	}
+
+	public void setDemandes(ArrayList<Demande> demandes) {
+		this.demandes = demandes;
+	}
 }
