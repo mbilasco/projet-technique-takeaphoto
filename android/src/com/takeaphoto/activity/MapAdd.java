@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,13 +20,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
-//import com.takeaphoto.database.DemandesBDD;
 
 /**
  * This shows how to create a simple activity with a map and a marker on the
@@ -42,100 +41,106 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	 * available.
 	 */
 	private GoogleMap gMap;
-	private MarkerOptions markerOptions;
+	private MarkerOptions ajoutMarker;
+	private ArrayList<MarkerOptions> mesMarker;
 	private Activity mainActivity;
-//	private DemandesBDD demandesBDD;
 	private User user;
 	private ArrayList<Demande> demandes;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		markerOptions = new MarkerOptions();
+		ajoutMarker = new MarkerOptions();
 		setHasOptionsMenu(true);
 	}
 
-	public void initialize(Activity main,/* DemandesBDD demandesBDD,*/ User user) {
+	public void initialize(Activity main, User user) {
 		this.setMainActivity(main);
-	//	this.setDemandeBDD(demandesBDD);
 		this.setUser(user);
 	}
 
 	public void setMainActivity(Activity main) {
 		mainActivity = main;
 	}
-/*
-	public void setDemandeBDD(DemandesBDD demandesBDD) {
-		this.demandesBDD = demandesBDD;
-	}
-*/
+	
 	public void setUser(User user) {
 		this.user = user;
 	}
 
+	private void setMarkerDemandes() {
+		MarkerOptions m = new MarkerOptions();
+		
+		for(Demande d : demandes){
+			m.title(d.getDescription());
+			
+			switch(d.getEtat()){
+				case 0 :
+					m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+					break;
+				case 1 :
+					m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+					break;
+				case 2 :
+					m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+					break;
+			}
+			m.position(new LatLng(d.getLat(), d.getLng()));
+			m.snippet(d.getId()+"");
+			m.draggable(true);
+	
+			gMap.addMarker(m);
+		}
+	}
+	
 	private void setMarker(String result) {
-
-		// Setting the title for the marker.
-		// This will be displayed on taping the marker
-		if (mainActivity.getIntent() != null && this.user.getUserId() != null)
-			markerOptions.title(this.user.getUserName());
-		else
-			markerOptions.title("Unregistered User (developpement)");
-		markerOptions.snippet(result);
-
-		markerOptions.draggable(true);
-		// Clears the previously touched position
-		gMap.clear();
-
-		// Placing a marker on the touched position
-		gMap.addMarker(markerOptions);
+		ajoutMarker.title("Demande non validée");
+		ajoutMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+		ajoutMarker.draggable(true);
+		ajoutMarker.snippet(result);
+		gMap.addMarker(ajoutMarker);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		setUpMapIfNeeded();
+		setMarkerDemandes();
 	}
 
 	private void setUpMapIfNeeded() {
-		// Do a null check to confirm that we have not already instantiated the
-		// map.
 		if (gMap == null) {
-			// Try to obtain the map from the SupportMapFragment.
 			gMap = getMap();
 			gMap.setMyLocationEnabled(true);
 			gMap.setOnMarkerDragListener(this);
-
+			LatLng position = new LatLng(42.00,24.00);
+	        gMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+	        gMap.animateCamera(CameraUpdateFactory.zoomTo(2));
+			
 			gMap.setOnMapLongClickListener(new OnMapLongClickListener() {
 				public void onMapLongClick(LatLng point) {
 					// Setting the position for the marker
-					markerOptions.position(point);
+					ajoutMarker.position(point);
 
 					AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
 
 					alert.setTitle("Description de la photo voulue :");
 
-					// Set an EditText view to get user input
 					final EditText input = new EditText(mainActivity);
 					alert.setView(input);
 
 					alert.setPositiveButton("Ok",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,	int whichButton) {
-									setMarker(input.getText().toString());
-								}
-							});
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,	int whichButton) {
+								setMarker(input.getText().toString());
+							}
+						});
 
 					alert.setNegativeButton("Cancel",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,	int whichButton) {
-									// Canceled.
-								}
-							});
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,	int whichButton) {	}
+						});
 
 					alert.show();
-
-					// Animating to the touched position
 
 					gMap.animateCamera(CameraUpdateFactory.newLatLng(point));
 
@@ -145,7 +150,6 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	}
 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Add your menu entries here
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.map_add, menu);
 	}
@@ -153,59 +157,52 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_save:
-			String desc = markerOptions.getSnippet();
-			AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
-
-			if (desc != null) {
-				alert.setTitle("Voulez-vous vraiment valider cette demande ?");
-				alert.setMessage("Description : \n"	+ markerOptions.getSnippet());
-				
-				alert.setPositiveButton("Ok",
+			case R.id.menu_save:
+				String desc = ajoutMarker.getSnippet();
+				AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
+	
+				if (desc != null) {
+					alert.setTitle("Voulez-vous vraiment valider cette demande ?");
+					alert.setMessage("Description : \n"	+ ajoutMarker.getSnippet());
+					
+					alert.setPositiveButton("Ok",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,	int whichButton) {
-								Demande demande = new Demande(user.getUserId(),	markerOptions.getPosition().latitude, markerOptions.getPosition().longitude, markerOptions.getSnippet());
+								Demande demande = new Demande(user.getUserId(),	ajoutMarker.getPosition().latitude, ajoutMarker.getPosition().longitude, ajoutMarker.getSnippet());
+								
 								DemandeServeur demandeServeur = new DemandeServeur();
 
 								demandeServeur.addDemande(user, demande);
 								demandes.add(demande);
-			/*
-								demandesBDD.open();
-								demandesBDD.insertDemande(demande);
-								demandesBDD.close();
-			*/					Toast.makeText(mainActivity, "Votre demande a ete ajoutee",	Toast.LENGTH_SHORT).show();
-
-								markerOptions = new MarkerOptions();
+								
+								Toast.makeText(mainActivity, "Votre demande a ete ajoutee",	Toast.LENGTH_SHORT).show();
+								
+								ajoutMarker = new MarkerOptions();
 								gMap.clear();
+								setMarkerDemandes();
 							}
 						});
-
-				alert.setNegativeButton("Cancel",
+	
+					alert.setNegativeButton("Cancel",
 						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-								// Canceled.
-							}
+							public void onClick(DialogInterface dialog, int whichButton) {	}
 						});
-			} else {
-				alert.setTitle("Erreur");
-				alert.setMessage("Vous devez d'abord poser un marqueur et lui ajouter une description");
-				alert.setNeutralButton("OK",
+				} else {
+					alert.setTitle("Erreur");
+					alert.setMessage("Vous devez d'abord poser un marqueur et lui ajouter une description");
+					alert.setNeutralButton("OK",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,	int whichButton) {
 								
 							}
 						});
+				}
+	
+				alert.show();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 			}
-
-			alert.show();
-			return true;
-
-			// case R.id.menu_search:
-			// Comportement du bouton "rechercher"
-			// return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
 	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -217,7 +214,21 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	public void onMarkerDrag(Marker marker) {	}
 
 	@Override
-	public void onMarkerDragEnd(Marker marker) {	}
+	public void onMarkerDragEnd(Marker marker) {
+		if(marker.getTitle().compareTo("Demande non validée")!=0){
+			for(Demande d : demandes){
+				if(d.getId() == Integer.parseInt(marker.getSnippet())){
+					d.setLat(marker.getPosition().latitude);
+					d.setLng(marker.getPosition().longitude);
+					DemandeServeur demandeServeur = new DemandeServeur();
+					demandeServeur.updatePositionDemande(d.getId(), d.getLat(), d.getLng());
+				}
+			}
+		}
+		else{
+			ajoutMarker.position(marker.getPosition());
+		}
+	}
 
 	@Override
 	public void onMarkerDragStart(Marker marker) {	  }

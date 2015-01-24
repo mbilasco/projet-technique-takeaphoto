@@ -374,6 +374,34 @@ public class DemandeServeur extends Serveur{
 		return resultTmp ;
 	}
 	
+	public String updatePositionDemande(int id_demande, Double latitude, Double longitude){
+		String resultTmp = null ;
+		String lat = latitude+"";
+		String lng = longitude+"";
+		ArrayList<String> args = new ArrayList<String>() ;
+		args.add("update_position_demande.php") ;
+		args.add("id_demande=" + id_demande);
+		Log.i("update positiiiiiiion",lat + " " + lng +"");
+		args.add("latitude=" + lat);
+		args.add("longitude=" + lng);
+		
+		sendJson(args);
+		while(isRunning()){}
+		
+    	if(getResultArray() != null){
+			if(getResultArray().containsKey("result") && getResultArray().get("result").toString().contains("TRUE")){
+				setResultToFalse() ;
+				setRunning(true) ;
+				
+			}else
+			resultTmp = "Erreur distante" ;
+		}
+		
+    	setResultToFalse() ;
+    	
+		return resultTmp ;
+	}
+	
 	public ArrayList <Reponse> getURLPhotoReponse(int id_demande){
 		ArrayList <Reponse> resultTmp = new ArrayList<Reponse>() ;
 		

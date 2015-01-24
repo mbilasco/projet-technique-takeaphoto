@@ -41,49 +41,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-	//	DemandesBDD demandesBDD = new DemandesBDD(this);
-		/*
-		UserBDD userBDD = new UserBDD(this);
-		userBDD.open();
-		//ArrayList<User> tmp = userBDD.getUserWithId(this.getIntent().getIntExtra("EXTRA_ID_USER", -1));
-		ArrayList<User> tmp = userBDD.getAllUser();
-		User user = tmp.get(0);
-		userBDD.close();
-		*/
-	//	mapAdd.setDemandeBDD(demandesBDD);
-	//	mapRep.setDemandeBDD(demandesBDD);
 		mapAdd.setMainActivity(this);
 		mapRep.setMainActivity(this);
 		
 		user = new User(this.getIntent().getStringExtra("USER_ID"),this.getIntent().getStringExtra("USER_NAME"));
 		manager.setUser(user);
 		mapAdd.setUser(user);
-		mapRep.setUser(user);
 		
-		mapRep.setmContext(this);
 		mapRep.setOauth(this.getIntent().getSerializableExtra("OAUTH"));
-				
-		demandes = new DemandeServeur().getDemandes();
-		demandesCurrentUser = new ArrayList<Demande>();
-		demandesOtherUsers = new ArrayList<Demande>();
-		
+						
 		Log.i("current user : ", user.getUserId()+"");	
-		
-		for(int i=0; i<demandes.size(); i++){
-			Log.i("other user : ", demandes.get(i).getUserId()+"");	
-			if(demandes.get(i).getUserId().compareTo(user.getUserId())==0){
-				demandesCurrentUser.add(demandes.get(i));
-			}
-			else{
-				demandesOtherUsers.add(demandes.get(i));
-			}
-		}
-		mapAdd.setDemandes(demandesCurrentUser);
-		mapRep.setDemandes(demandesOtherUsers);
-		manager.setDemandes(demandesCurrentUser);
-		Log.i("autres demandes taille : ", demandesOtherUsers.size()+"");	
-		Log.i("mes demandes taille : ", demandesCurrentUser.size()+"");		
-		
+				
 		// Set up the action bar.
 		final ActionBar actionBar = this.getActionBar();
 		if (actionBar != null) {
@@ -131,12 +99,28 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	public void onResume() {
 		super.onResume();
+				
+		demandes = new DemandeServeur().getDemandes();
+		demandesCurrentUser = new ArrayList<Demande>();
+		demandesOtherUsers = new ArrayList<Demande>();
+		
+
+		for(int i=0; i<demandes.size(); i++){
+			if(demandes.get(i).getUserId().compareTo(user.getUserId())==0){
+				demandesCurrentUser.add(demandes.get(i));
+			}
+			else{
+				demandesOtherUsers.add(demandes.get(i));
+			}
+		}
+		mapAdd.setDemandes(demandesCurrentUser);
+		mapRep.setDemandes(demandesOtherUsers);
+		manager.setDemandes(demandesCurrentUser);
+		
 	}
 
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-		// When the given tab is selected, switch to the corresponding page in
-		// the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
@@ -146,33 +130,26 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
 
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the sections/tabs/pages.
-	 */
 	class SectionsPagerAdapter extends FragmentPagerAdapter {
-
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
-			
 		}
 
 		@Override
 		public Fragment getItem(int position) {
-
 			Fragment frag = new Fragment();
 			switch (position) {
-			case 0:
-				frag = mapAdd;
-				break;
-
-			case 1:
-				frag = mapRep;
-				break;
-
-			case 2:
-				frag = manager;
-				break;
+				case 0:
+					frag = mapAdd;
+					break;
+	
+				case 1:
+					frag = mapRep;
+					break;
+	
+				case 2:
+					frag = manager;
+					break;
 			}
 
 			return frag;

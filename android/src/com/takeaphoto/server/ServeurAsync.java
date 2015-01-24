@@ -99,7 +99,7 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 					remplirResultArray("demande", jsonObj);
 				} else if (nomFichier.equals("get_photos.php")) {
 					remplirResultArray("url", jsonObj);
-				} else if (nomFichier.equals("del_demande.php") || nomFichier.equals("update_demande.php") || nomFichier.equals("update_etat_demande.php")){
+				} else if (nomFichier.equals("del_demande.php") || nomFichier.equals("update_demande.php") || nomFichier.equals("update_etat_demande.php") || nomFichier.equals("update_position_demande.php")){
 					addInResultArray("result", "TRUE") ;
 				} else if(nomFichier.equals("get_demandes.php")) {
 					remplirResultArray("demandes", jsonObj);

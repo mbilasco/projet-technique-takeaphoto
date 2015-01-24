@@ -30,7 +30,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class VisualisationDemande extends Activity {
+public class VisualisationDemande extends FragmentActivity {
 	static final int REQUEST_TAKE_PHOTO = 1;
 	
 	private String mCurrentPhotoPath;
@@ -42,6 +42,7 @@ public class VisualisationDemande extends Activity {
 	
 	private String lat;
 	private String lng;
+	private String desc;
 	private OAuth oauth;
 	
 	private File photoFile;
@@ -58,18 +59,16 @@ public class VisualisationDemande extends Activity {
         
         lat = this.getIntent().getStringExtra("LAT_VALUE");
         lng = this.getIntent().getStringExtra("LNG_VALUE");
+        desc = this.getIntent().getStringExtra("DESC_VALUE");
         oauth = (OAuth) this.getIntent().getSerializableExtra("OAUTH_VALUE");
+        
+        latValue.setText(lat);
+        lngValue.setText(lng);
+        descValue.setText(desc);
      
         buttonTakePhoto.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				/*
-				Intent intent = new Intent(getApplicationContext(), VisualisationDemande.class);
-	            intent.putExtra("LAT_VALUE", lat);
-	            intent.putExtra("LNG_VALUE", lng);
-	            intent.putExtra("OAUTH_VALUE", 	oauth);
-				startActivity(intent);
-				*/
 				dispatchTakePictureIntent();
 			}
         });
