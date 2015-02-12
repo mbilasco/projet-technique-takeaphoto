@@ -1,6 +1,8 @@
 package com.takeaphoto.model;
 
-public class Reponse {
+import java.io.Serializable;
+
+public class Reponse implements Serializable {
 	private int id ;
 	private String url;
 	private int id_demande;

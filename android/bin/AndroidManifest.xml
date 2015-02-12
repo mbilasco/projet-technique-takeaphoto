@@ -52,8 +52,10 @@
          <activity
             android:name=".CreateAccountActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".VisualisationPhoto" />
+         <activity
+            android:name=".VisualisationReponses"
+            android:screenOrientation="portrait" />
+        <activity android:name=".VisualisationPhoto" />
         <activity
             android:name=".VisualisationDemande"
             android:screenOrientation="portrait"

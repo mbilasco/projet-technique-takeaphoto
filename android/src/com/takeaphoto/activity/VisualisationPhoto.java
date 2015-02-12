@@ -9,17 +9,17 @@ import android.widget.ImageView;
 public class VisualisationPhoto extends FragmentActivity {
  
     ImageView welcome;
-    String urlWelcome = null;
+    String url = null;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
         
-        urlWelcome = this.getIntent().getStringExtra("URL_PHOTO");
+        url = this.getIntent().getStringExtra("URL_PHOTO");
         welcome = (ImageView) findViewById(R.id.imageView1);
        
         ImageDownloadTask img = new ImageDownloadTask(welcome);
-        img.execute(urlWelcome);
+        img.execute(url);
     }
 }

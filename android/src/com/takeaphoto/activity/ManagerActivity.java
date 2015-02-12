@@ -181,24 +181,14 @@ public class ManagerActivity extends ListFragment {
 			
 			DemandeServeur demandeServeur = new DemandeServeur();
 			ArrayList<Reponse> result = demandeServeur.getURLPhotoReponse(id_demande);
-			Log.i("reponse serveur","2");
-			Log.i("result", result.get(0).toString());
+						
 			if (result != null) {
-				Log.i("reponse serveur","3");
-				photos = new ArrayList<Bitmap>();
-				nbPhotos = result.size();
-				nbPhotosCurrent = 0;
-				/*for (Reponse reponse : result) {
-					Log.i("reponse serveur",reponse.toString());
-					new getPhoto().execute(reponse.getId_demande()+"", reponse.getUrl());
-				}*/
-				/*
-				Log.i("reponse serveur",result.get(0).toString());
-				new getPhoto().execute(result.get(0).getId_demande()+"", result.get(0).getUrl());
-				*/
-				Intent intent = new Intent(getActivity(), VisualisationPhoto.class);
+				Intent intent = new Intent(getActivity(), VisualisationReponses.class);
+				intent.putExtra("REPONSES", result);				
+/*
 				intent.putExtra("URL_PHOTO", result.get(0).getUrl());
 				intent.putExtra("ID_DEMANDE", result.get(0).getId_demande());
+*/				
 				startActivity(intent);
 			}
 		}

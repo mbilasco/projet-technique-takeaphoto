@@ -42,13 +42,10 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
                         result = null;
                         return;
                 }
-                Log.i("onPostExecute Download","a");
                 ImageCache.saveToCache(this.mUrl, result);
                 if (imgRef != null) {
-                	Log.i("onPostExecute Download","b");
                         ImageView imageView = imgRef.get();
                         ImageDownloadTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
-                      	Log.i("onPostExecute Download","c");
                         imageView.setImageBitmap(result);
                 }
 
