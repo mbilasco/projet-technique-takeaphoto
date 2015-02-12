@@ -14,8 +14,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-
-import android.util.Log;
  
 /**
  * This utility class provides an abstraction layer for sending multipart HTTP
@@ -38,11 +36,9 @@ public class MultipartUtility {
      * @param charset
      * @throws IOException
      */
-    public MultipartUtility(String requestURL, String charset)
-            throws IOException {
+    public MultipartUtility(String requestURL, String charset) throws IOException {
         this.charset = charset;
-         
-        // creates a unique boundary based on time stamp
+        
         boundary = "===" + System.currentTimeMillis() + "===";
          
         URL url = new URL(requestURL);

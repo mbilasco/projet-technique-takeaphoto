@@ -93,7 +93,6 @@ public class VisualisationDemande extends FragmentActivity {
             try {
             	photoId = task.execute().get();
             	
-				Log.i("je suis de retouuuuuuuuuur", photoId);
 				GetPhotoInfoTask getInfoTask = new GetPhotoInfoTask(this, oauth, photoId);
 				url = getInfoTask.execute().get();
 				Log.i("URL MA PHOTO", url);
@@ -108,7 +107,6 @@ public class VisualisationDemande extends FragmentActivity {
 		}
 	}
 	
-
 	private void dispatchTakePictureIntent() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    // Ensure that there's a camera activity to handle the intent

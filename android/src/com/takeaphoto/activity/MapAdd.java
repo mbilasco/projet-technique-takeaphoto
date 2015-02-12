@@ -28,18 +28,7 @@ import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 
-/**
- * This shows how to create a simple activity with a map and a marker on the
- * map.
- * <p>
- * Notice how we deal with the possibility that the Google Play services APK is
- * not installed/enabled/updated on a user's device.
- */
 public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
-	/**
-	 * Note that this may be null if the Google Play services APK is not
-	 * available.
-	 */
 	private GoogleMap gMap;
 	private MarkerOptions ajoutMarker;
 	private ArrayList<MarkerOptions> mesMarker;
@@ -47,7 +36,6 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	private User user;
 	private ArrayList<Demande> demandes;
 	
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ajoutMarker = new MarkerOptions();
@@ -118,7 +106,6 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 			
 			gMap.setOnMapLongClickListener(new OnMapLongClickListener() {
 				public void onMapLongClick(LatLng point) {
-					// Setting the position for the marker
 					ajoutMarker.position(point);
 
 					AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
@@ -128,17 +115,15 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 					final EditText input = new EditText(mainActivity);
 					alert.setView(input);
 
-					alert.setPositiveButton("Ok",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,	int whichButton) {
-								setMarker(input.getText().toString());
-							}
-						});
+					alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,	int whichButton) {
+							setMarker(input.getText().toString());
+						}
+					});
 
-					alert.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,	int whichButton) {	}
-						});
+					alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,	int whichButton) {	}
+					});
 
 					alert.show();
 
@@ -183,19 +168,15 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 							}
 						});
 	
-					alert.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {	}
-						});
+					alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {	}
+					});
 				} else {
 					alert.setTitle("Erreur");
 					alert.setMessage("Vous devez d'abord poser un marqueur et lui ajouter une description");
-					alert.setNeutralButton("OK",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,	int whichButton) {
-								
-							}
-						});
+					alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,	int whichButton) {	}
+					});
 				}
 	
 				alert.show();

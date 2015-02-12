@@ -35,7 +35,6 @@ import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.Reponse;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
-import com.takeaphoto.server.PhotoServeur;
 
 public class ManagerActivity extends ListFragment {
 	private ArrayList<Demande> demandes;
@@ -118,8 +117,7 @@ public class ManagerActivity extends ListFragment {
 				// Ids of views in listview_layout
 				int[] to = { R.id.image, R.id.txt };
 
-				// Instantiating an adapter to store each items
-				// R.layout.listview_layout defines the layout of each item
+				// Instantiating an adapter to store each items R.layout.listview_layout defines the layout of each item
 				SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aList, R.layout.listview, from, to);
 
 				setListAdapter(adapter);
@@ -130,7 +128,6 @@ public class ManagerActivity extends ListFragment {
 	}
 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Add your menu entries here
 		super.onCreateOptionsMenu(menu, inflater);
 		// inflater.inflate(R.menu.refresh, menu) ;
 		inflater.inflate(R.menu.main, menu);
@@ -148,20 +145,17 @@ public class ManagerActivity extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, final int position, long id) {
-
 		final int id_demande = demandes.get(position).getId();
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 		int etat = demandes.get(position).getEtat();
 		
-		Log.i("reponse serveur","0");
-		
 		if (etat == 0) {
 			alert.setTitle("Demande : " + demandes.get(position).getDescription());
 			alert.setPositiveButton("Modifier Description", new OnClickListener() {
-						public void onClick(DialogInterface dialog,	int whichButton) {
-							renomerDemande(position);
-						}
-					});
+				public void onClick(DialogInterface dialog,	int whichButton) {
+					renomerDemande(position);
+				}
+			});
 
 			alert.setNeutralButton("Supprimer Demande", new OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
@@ -170,13 +164,11 @@ public class ManagerActivity extends ListFragment {
 			});
 
 			alert.setNegativeButton("Annuler", new OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-				}
+				public void onClick(DialogInterface dialog, int whichButton) {	}
 			});
 
 			alert.show();
 		} else {
-			Log.i("reponse serveur","1");
 		//	ArrayList<Object> result = new PhotoServeur().getUrls(this.user,id_demande);
 			
 			DemandeServeur demandeServeur = new DemandeServeur();
@@ -199,13 +191,11 @@ public class ManagerActivity extends ListFragment {
 		
 		@Override
 		protected Bitmap doInBackground(String... args) {
-			Log.i("reponse serveur","Z");
 			id_demande = Integer.parseInt(args[0]);
 			String url = args[1];
 			Bitmap bmp = null;
 
 			try {
-				Log.i("reponse serveur","Y");
 				URLConnection conn = null;
 				URL u = new URL(url);
 				conn = u.openConnection();
@@ -213,12 +203,10 @@ public class ManagerActivity extends ListFragment {
 				httpConn.setRequestMethod("GET");
 				httpConn.connect();
 				InputStream is = null;
-				Log.i("reponse serveur","X");
 				if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					is = httpConn.getInputStream();
 					int thisLine;
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
-					Log.i("reponse serveur","V");
 					while ((thisLine = is.read()) != -1) {
 						bos.write(thisLine);
 					}
@@ -228,18 +216,14 @@ public class ManagerActivity extends ListFragment {
 					if (bos != null) {
 						bos.close();
 					}
-					Log.i("reponse serveur","Q");
 					bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
 					return bmp;
 				}
-
 				httpConn.disconnect();
 
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -249,13 +233,10 @@ public class ManagerActivity extends ListFragment {
 		protected void onPostExecute(Bitmap bmp) {
 			photos.add(bmp);
 			nbPhotosCurrent++;
-			Log.i("post execute", "a");
 			if (nbPhotos == nbPhotosCurrent) {
-				Log.i("post execute", "b");
 				nbPhotosCurrent = 0;
 				afficherPhotos(id_demande);
 			}
-
 		}
 	}
 
@@ -269,7 +250,6 @@ public class ManagerActivity extends ListFragment {
 
 			if (nbPhotosCurrent < nbPhotos - 1) {
 				alert.setPositiveButton("Suivant", new OnClickListener() {
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						nbPhotosCurrent++;
 						afficherPhotos(id_demande);
@@ -278,7 +258,6 @@ public class ManagerActivity extends ListFragment {
 			}
 
 			alert.setNegativeButton("Ok", new OnClickListener() {
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					photos = null;
 					nbPhotos = 0;
@@ -288,8 +267,9 @@ public class ManagerActivity extends ListFragment {
 			});
 
 			alert.show();
-		} else
+		} else {
 			choixEtat(id_demande);
+		}	
 	}
 
 	private void choixEtat(final int id_demande) {
@@ -308,14 +288,12 @@ public class ManagerActivity extends ListFragment {
 				alert.setTitle("Voulez-vous d'autres photos pour cette demande ?");
 	
 				alert.setPositiveButton("Oui", new OnClickListener() {
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 	
 					}
 				});
 	
 				alert.setNegativeButton("Non", new OnClickListener() {
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						new DemandeServeur().updateDemande(getActivity(), user,	id_demande, "etat", "2");
 						actualiserListeDemande();
@@ -332,14 +310,12 @@ public class ManagerActivity extends ListFragment {
 
 		alert.setTitle("Description de la photo voulue :");
 
-		// Set an EditText view to get user input
 		final EditText input = new EditText(getActivity());
 		input.setText(demandes.get(position).getDescription());
 		alert.setView(input);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-
 				String desc = input.getText().toString();
 				String result = new DemandeServeur().updateDemande(
 						getActivity(), user, demandes.get(position).getId(),
@@ -355,28 +331,22 @@ public class ManagerActivity extends ListFragment {
 			}
 		});
 
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Canceled.
-					}
-				});
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {	}
+		});
 		alert.show();
 	}
 
 	private void supprimerDemande(final int id_demande) {
-
-		String result = new DemandeServeur().removeDemande(getActivity(),
-				this.user, id_demande);
+		String result = new DemandeServeur().removeDemande(getActivity(), this.user, id_demande);
 
 		if (result != null){
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 		}
 		else{
-			Toast.makeText(getActivity(), R.string.erreur_connextion,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.erreur_connextion, Toast.LENGTH_SHORT).show();
 		}
-
+		
 		actualiserListeDemande();
 	}
 

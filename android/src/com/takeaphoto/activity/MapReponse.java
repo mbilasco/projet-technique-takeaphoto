@@ -65,8 +65,6 @@ public class MapReponse extends SupportMapFragment {
 	        gMap.animateCamera(CameraUpdateFactory.zoomTo(2));
 		}
 		gMap.setOnMarkerClickListener(new OnMarkerClickListener(){
-
-			@Override
 			public boolean onMarkerClick(Marker marker) {				
 				Intent intent = new Intent(mainActivity.getApplicationContext(), VisualisationDemande.class);
 	            intent.putExtra("LAT_VALUE", marker.getPosition().latitude +"");

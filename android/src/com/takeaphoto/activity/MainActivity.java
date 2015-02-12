@@ -58,8 +58,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		}
 		
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections of the app.
+		// Create the adapter that will return a fragment for each of the three primary sections of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 		
 		// Set up the ViewPager with the sections adapter.
@@ -68,8 +67,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
-		// a reference to the Tab.
-		
+		// a reference to the Tab.		
 		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
@@ -99,12 +97,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	public void onResume() {
 		super.onResume();
-				
 		demandes = new DemandeServeur().getDemandes();
 		demandesCurrentUser = new ArrayList<Demande>();
 		demandesOtherUsers = new ArrayList<Demande>();
 		
-
 		for(int i=0; i<demandes.size(); i++){
 			if(demandes.get(i).getUserId().compareTo(user.getUserId())==0){
 				demandesCurrentUser.add(demandes.get(i));
@@ -116,7 +112,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mapAdd.setDemandes(demandesCurrentUser);
 		mapRep.setDemandes(demandesOtherUsers);
 		manager.setDemandes(demandesCurrentUser);
-		
 	}
 
 	@Override
@@ -157,7 +152,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
 			return NB_ONGLET;
 		}
 

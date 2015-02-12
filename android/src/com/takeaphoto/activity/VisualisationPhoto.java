@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.ImageView;
  
 public class VisualisationPhoto extends FragmentActivity {
- 
     ImageView welcome;
     String url = null;
     
