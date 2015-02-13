@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,8 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.googlecode.flickrjandroid.oauth.OAuth;
@@ -26,6 +23,11 @@ import com.takeaphoto.flickr.GetOAuthTokenTask;
 import com.takeaphoto.flickr.LoadUserTask;
 import com.takeaphoto.flickr.OAuthTask;
 
+/**
+ * Activité permettant l'identification des utilisateurs
+ * @author Maxime & Jules
+ *
+ */
 public class FlickrActivity extends Activity {
         public static final String CALLBACK_SCHEME = "flickrj-android-sample-oauth";
         public static final String PREFS_NAME = "flickrj-android-sample-pref";
@@ -43,13 +45,11 @@ public class FlickrActivity extends Activity {
         
         private Context mContext;
         public OAuth oauth = null;
-        
-        //private ProgressBar spinner;
-        
-        // The progress dialog before going to the browser
-        
-                
+                        
         @Override
+        /**
+         * Connexion à l'application via OAuth Yahoo
+         */
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login_flickr);
@@ -58,9 +58,7 @@ public class FlickrActivity extends Activity {
             oauthYahoo = (ImageView) this.findViewById(R.id.imageView1);
            	oauthYahoo.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                	//spinner.setVisibility(View.VISIBLE);
-            		
+                public void onClick(View v) {            		
                 	oauth = getOAuthToken();
                     if (oauth == null || oauth.getUser() == null) {
                     	OAuthTask task = new OAuthTask(mContext);
@@ -72,20 +70,22 @@ public class FlickrActivity extends Activity {
                 }
             });
            	
-           	//spinner = (ProgressBar)findViewById(R.id.loadingSignIn);
-            
             oauth = getOAuthToken();
-            if(oauth!=null && user==null){
-            	//spinner.setVisibility(View.VISIBLE);
-            }
     	}
-       
+        
+        /**
+         * Redirige utilisateur vers espace de connexion Flickr Yahoo
+         * @param oauth
+         */
         private void load(OAuth oauth) {
             if (oauth != null) {
                 new LoadUserTask(this, oauthYahoo).execute(oauth);
             }
         }
         
+        /**
+         * Ouverture de l'application suite à la connexion
+         */
         public void launchActivity(){
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             Log.i("launch oauth", oauth + "");
@@ -121,17 +121,13 @@ public class FlickrActivity extends Activity {
             if (CALLBACK_SCHEME.equals(scheme) && (savedToken == null || savedToken.getUser() == null)) {
                 Uri uri = intent.getData();
                 String query = uri.getQuery();
-                Log.i("task","Returned Query: " + query);
                 String[] data = query.split("&");
                 if (data != null && data.length == 2) {
                     String oauthToken = data[0].substring(data[0].indexOf("=") + 1);
                     String oauthVerifier = data[1].substring(data[1].indexOf("=") + 1);
-                    Log.i("task","OAuth Token: {}; OAuth Verifier: {}" + oauthToken + oauthVerifier);
-
                     oauth = getOAuthToken();
                     if (oauth != null && oauth.getToken() != null && oauth.getToken().getOauthTokenSecret() != null) {
                         GetOAuthTokenTask task = new GetOAuthTokenTask(this);
-                        Log.i("task","OAuth TokenSecret: {}; OAuth Verifier: {}" + oauth.getToken().getOauthTokenSecret() + oauthVerifier);
                         task.execute(oauthToken, oauth.getToken().getOauthTokenSecret(), oauthVerifier);
                     }
                 }
@@ -148,7 +144,6 @@ public class FlickrActivity extends Activity {
                     Toast.makeText(this,"Authorization failed", Toast.LENGTH_LONG).show();
                     return;
 	            }
-	            //spinner.setVisibility(View.VISIBLE);
 	            saveOAuthToken(user.getUsername(), user.getId(), token.getOauthToken(), token.getOauthTokenSecret());
 	            load(result);
 	            launchActivity();

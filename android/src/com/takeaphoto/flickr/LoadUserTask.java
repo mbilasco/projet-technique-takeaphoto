@@ -31,7 +31,7 @@ public class LoadUserTask extends AsyncTask<OAuth, Void, User> {
         super.onPreExecute();
         Log.i("LoadUserTask onPreExecute", "debut");
         //mProgressDialog = new ProgressDialog(flickrjAndroidSampleActivity);
-        ProgressDialog.show(flickrjAndroidSampleActivity,"", "Connexion en cours...", true);
+        mProgressDialog = ProgressDialog.show(flickrjAndroidSampleActivity,"", "Connexion en cours...", true);
         //mProgressDialog.setCanceledOnTouchOutside(false);
         //mProgressDialog.setCancelable(false);
         
@@ -71,6 +71,7 @@ public class LoadUserTask extends AsyncTask<OAuth, Void, User> {
     		if (FlickrActivity.mProgressDialog != null) {
     			FlickrActivity.mProgressDialog.dismiss();
             }*/
+    		mProgressDialog.dismiss();
             if (user == null) {
                     return;
             }

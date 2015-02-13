@@ -92,6 +92,7 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	public void onResume() {
 		super.onResume();
 		setUpMapIfNeeded();
+		gMap.clear();
 		setMarkerDemandes();
 	}
 

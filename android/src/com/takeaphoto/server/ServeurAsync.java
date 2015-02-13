@@ -42,7 +42,7 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
     protected String doInBackground(ArrayList<String>...params){
     	HttpClient client = new DefaultHttpClient();
 		Log.i("Ajout demande", "A");
-		HttpConnectionParams.setConnectionTimeout(client.getParams(), 1000);
+		HttpConnectionParams.setConnectionTimeout(client.getParams(), 20000);
 		HttpResponse response;
 		
 		// Cr�ation du tableau de donn�e a envoyer en POST
@@ -99,7 +99,7 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 					remplirResultArray("demande", jsonObj);
 				} else if (nomFichier.equals("get_photos.php")) {
 					remplirResultArray("url", jsonObj);
-				} else if (nomFichier.equals("del_demande.php") || nomFichier.equals("update_demande.php") || nomFichier.equals("update_etat_demande.php") || nomFichier.equals("update_position_demande.php")){
+				} else if (nomFichier.equals("del_demande.php") || nomFichier.equals("del_reponse.php")  || nomFichier.equals("update_demande.php") || nomFichier.equals("update_etat_demande.php") || nomFichier.equals("update_position_demande.php")){
 					addInResultArray("result", "TRUE") ;
 				} else if(nomFichier.equals("get_demandes.php")) {
 					remplirResultArray("demandes", jsonObj);

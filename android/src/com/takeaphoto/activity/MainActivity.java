@@ -14,13 +14,16 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 
-//import com.takeaphoto.database.DemandesBDD;
-
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 import com.takeaphoto.utils.CustomViewPager;
 
+/**
+ * Activité chargement des données pour les fragments
+ * @author Maxime & Jules
+ *
+ */
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -37,6 +40,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	final int NB_ONGLET = 3;
 
 	@Override
+	/**
+	 * Ouverture de l'application
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -49,8 +55,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mapAdd.setUser(user);
 		
 		mapRep.setOauth(this.getIntent().getSerializableExtra("OAUTH"));
-						
-		Log.i("current user : ", user.getUserId()+"");	
 				
 		// Set up the action bar.
 		final ActionBar actionBar = this.getActionBar();

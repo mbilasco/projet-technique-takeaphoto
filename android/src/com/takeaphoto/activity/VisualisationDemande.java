@@ -18,6 +18,7 @@ import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class VisualisationDemande extends FragmentActivity {
 	static final int REQUEST_TAKE_PHOTO = 1;
@@ -46,6 +48,7 @@ public class VisualisationDemande extends FragmentActivity {
 	private OAuth oauth;
 	
 	private File photoFile;
+	private ProgressDialog mProgressDialog;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,28 +85,14 @@ public class VisualisationDemande extends FragmentActivity {
             OAuthTask task = new OAuthTask(this.getApplicationContext());
             task.execute();
     	} else	if(photoFile!=null){
-        	UploadPhotoFlickr task = new UploadPhotoFlickr(this,oauth,photoFile);
-			
-			DemandeServeur demandeServeur = new DemandeServeur();
-			List <Demande> demandes = demandeServeur.getDemandesByLatLng(this, lat, lng);
-			
-            Demande demande = demandes.get(0);
-            String photoId = new String("");
-            String url = new String("");
+        	UploadPhotoFlickr task = new UploadPhotoFlickr(this,oauth,photoFile,mProgressDialog,lat,lng);
+        	
             try {
-            	photoId = task.execute().get();
-            	
-				GetPhotoInfoTask getInfoTask = new GetPhotoInfoTask(this, oauth, photoId);
-				url = getInfoTask.execute().get();
-				Log.i("URL MA PHOTO", url);
-				
+            	task.execute();
 			} catch (Exception e) {
 				e.printStackTrace();
-			} 
-            Reponse reponse = new Reponse(url, demande.getId());
-
-			demandeServeur.addReponse(this.getApplicationContext(),	demande, reponse);
-			demandeServeur.updateEtatDemande(demande.getId(), 1);
+			}
+            
 		}
 	}
 	
@@ -121,7 +110,7 @@ public class VisualisationDemande extends FragmentActivity {
 	        }
 	        // Continue only if the File was successfully created
 	        if (photoFile != null) {
-	            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
 	            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
 	        }
 	    }

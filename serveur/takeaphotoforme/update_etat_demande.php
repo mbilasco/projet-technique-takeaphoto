@@ -19,16 +19,16 @@ include("include/include.php");
 
 /* 1) Récupération des informations envoyées par l'application */
 $id_demande = $_POST['id_demande'];
-$etat = $POST['etat'];
+$etat = $_POST['etat'];
 
 $connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 
 if (!empty($id_demande)){
-		$sql_update_demande = "UPDATE takeaphotoforme_demandes SET etat = $etat WHERE id_demande = $id_demande";
+		$sql_update_demande = "UPDATE takeaphotoforme_demandes SET etat = " . $etat . " WHERE id_demande = " . $id_demande;
 		
 		$query_update_demande = $connexion->prepare($sql_update_demande);
 		$query_update_demande->execute();
-		
+
 		$result['result'] = "TRUE";
 }
 else{

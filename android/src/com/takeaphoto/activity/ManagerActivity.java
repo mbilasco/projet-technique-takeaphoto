@@ -159,6 +159,7 @@ public class ManagerActivity extends ListFragment {
 
 			alert.setNeutralButton("Supprimer Demande", new OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
+					demandes.remove(position);
 					supprimerDemande(id_demande);
 				}
 			});
@@ -176,7 +177,8 @@ public class ManagerActivity extends ListFragment {
 						
 			if (result != null) {
 				Intent intent = new Intent(getActivity(), VisualisationReponses.class);
-				intent.putExtra("REPONSES", result);				
+				intent.putExtra("REPONSES", result);
+				intent.putExtra("ID_DEMANDE", result.get(0).getId_demande());
 /*
 				intent.putExtra("URL_PHOTO", result.get(0).getUrl());
 				intent.putExtra("ID_DEMANDE", result.get(0).getId_demande());
@@ -185,7 +187,7 @@ public class ManagerActivity extends ListFragment {
 			}
 		}
 	}
-
+	
 	public class getPhoto extends AsyncTask<String, Integer, Bitmap> {
 		volatile int id_demande;
 		
@@ -317,6 +319,7 @@ public class ManagerActivity extends ListFragment {
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String desc = input.getText().toString();
+				demandes.get(position).setDescription(desc);
 				String result = new DemandeServeur().updateDemande(
 						getActivity(), user, demandes.get(position).getId(),
 						"description", desc);
@@ -346,7 +349,6 @@ public class ManagerActivity extends ListFragment {
 		else{
 			Toast.makeText(getActivity(), R.string.erreur_connextion, Toast.LENGTH_SHORT).show();
 		}
-		
 		actualiserListeDemande();
 	}
 

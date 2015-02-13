@@ -242,7 +242,31 @@ public class DemandeServeur extends Serveur{
 		    		demandeBdd.removeDemandeWithID(id_demande) ;
 		    		demandeBdd.close() ;
 				*/		resultTmp = "Votre demande a ete supprimee" ;
-			}else
+			} else
+				resultTmp = (String)getResultArray().get("message") ;
+		}else
+			resultTmp = "Erreur" ;
+		
+		setResultToFalse() ;
+		
+		return resultTmp ;
+	}
+	
+	public String removeReponse(Context context, int id_reponse){
+		String resultTmp = null ;
+		
+    	ArrayList<String> args = new ArrayList<String>() ;
+    	args.add("del_reponse.php") ;
+		args.add("id_reponse=" + id_reponse) ;
+		
+		sendJson(args);
+		while(isRunning()){}
+		
+	    if(getResultArray() != null){
+	    	if(getResultArray().containsKey("result") && getResultArray().get("result").toString().contains("TRUE")){
+	    		setResultToFalse() ;
+				setRunning(true);
+			} else
 				resultTmp = (String)getResultArray().get("message") ;
 		}else
 			resultTmp = "Erreur" ;
@@ -283,7 +307,7 @@ public class DemandeServeur extends Serveur{
 		setResultToFalse() ;
 	}
 	
-	public String addReponse(Context context, Demande demande, Reponse reponse) {
+	public String addReponse(Demande demande, Reponse reponse) {
 		//demandeBddIsSet(context);
 		String resultTmp = null;
 		
@@ -322,19 +346,21 @@ public class DemandeServeur extends Serveur{
 		return resultTmp ;
 	}
 	
-	public ArrayList<Demande> getDemandesByLatLng(Context context, String lat, String lng) {
+	public ArrayList<Demande> getDemandesByLatLng(String lat, String lng) {
+		Log.i("a", "a");
 		//demandeBddIsSet(context) ;
 		ArrayList<Demande> resultTmp = new ArrayList<Demande>() ;
-
+		Log.i("b", "b");
         ArrayList<String> args = new ArrayList<String>() ;
         args.add("get_demandes_with_latlng.php") ;
 		args.add("lat=" + lat);
 		args.add("lng=" + lng);
-		
+		Log.i("c", "c");
 		sendJson(args);
+		Log.i("c1",args.toString());
 		
 		while(isRunning()){}
-		
+		Log.i("d", "d");
     	if(getResultArray() != null){
     		
 	    	for (String mapKey : getResultArray().keySet()) {
@@ -343,9 +369,9 @@ public class DemandeServeur extends Serveur{
 	    		}
 	    	}
     	}
-    	
+    	Log.i("e", "e");
 	    setResultToFalse() ;
-    	
+	    Log.i("f", "f");
 		return (resultTmp.size() == 0 ) ? null : resultTmp;
 	}
 	
@@ -408,19 +434,14 @@ public class DemandeServeur extends Serveur{
 		ArrayList<String> args = new ArrayList<String>() ;
 		args.add("get_url_photo_demande.php") ;
 		args.add("id_demande=" + id_demande);
-		Log.i("yaya", "coucou");
+		
 		sendJson(args);
 		while(isRunning()){}
-		Log.i("yaya", "beuuuuh");
 		
     	if(getResultArray() != null){
-			Log.i("yaya", "beuuuuh X2");
-			Log.i("yaya", getResultArray().toString());
 			for (String mapKey : getResultArray().keySet()) {
-				Log.i("yaya", "beuuuuh X3");
 				if(!mapKey.contains("result") && !mapKey.contains("reponses")){
-					resultTmp.add((Reponse) getResultArray().get(mapKey));	
-					Log.i("yaya", ((Reponse) getResultArray().get(mapKey)).toString());
+					resultTmp.add((Reponse) getResultArray().get(mapKey));
 				}
 			}
 		}

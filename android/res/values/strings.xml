@@ -33,7 +33,7 @@
     <string name="str_lat_value">0.00</string>    
     <string name="str_lng_value">0.00</string>    
     <string name="str_desc_value">Ici, la description de la demande saisie par un utilisateur</string>    
-    <string name="button_refuser">Refuser</string>    
-    <string name="button_accepter">Accepter</string>    
+    <string name="button_refuser">Rejetter</string>    
+    <string name="button_accepter">Enregistrer</string>    
     <string name="label_visu_demande">Voici les détails de cette demande</string> 
 </resources>
