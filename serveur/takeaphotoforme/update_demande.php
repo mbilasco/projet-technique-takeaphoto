@@ -1,30 +1,17 @@
 <?php
 /**
- * Renvoie le tableau des demandes d'un utilisateur
+ * Met à jour une demande
  *
- * @param login 
- * @param pass
  * @param id_demande
- * @param etat || @param description
- *
- * 1) Récupération des informations envoyées par l'application (login & mdp)
- * 2) Connection DB
- * 3) Récupération de l'id de la demande & de la variable
- + 4) Update sur la demande
- * 5) Retour
- *
- * Liens : 
- */
+ * @param etat 
+ * @param description
+*/
 include("include/include.php");
 
-/* 1) Récupération des informations envoyées par l'application */
-$id_user = $_POST[‘idUser’];
-$pass  = md5($mcrypt->decrypt($pass));
-
-/* 3) Connection DB */
+/* Connection DB */
 $connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 
-/* 3)Récupération de l'id de la demande a supprimer */
+/* Récupération de l'id de la demande a mettre à jour */
 $id_demande = $_POST['id_demande'];
 if (!empty($id_demande)){
 	$etat = $_POST['etat'];
@@ -38,7 +25,7 @@ if (!empty($id_demande)){
 			$sql_update_demande = "UPDATE takeaphotoforme_demandes SET description = '$description' WHERE id_demande = $id_demande";
 		}
 		
-		/* 4)Update sur la demande */
+		/* Update sur la demande */
 		$query_update_demande = $connexion->prepare($sql_update_demande);
 		$query_update_demande->execute();
 		
@@ -54,6 +41,6 @@ else{
 	$result['message'] = "L'id de la demande est inexistant.";
 }
 
-/* 5) Retour */
+/* Retour */
 print(json_encode($result));
 ?>

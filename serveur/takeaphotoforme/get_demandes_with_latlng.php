@@ -1,30 +1,23 @@
 <?php
 /**
- * Renvoie le tableau des demandes d'un utilisateur
+ * Renvoie le tableau des demandes associées à une position GPS
  *
- * @param login
- * @param pass 
- * @param id_demande
- *
- * 1) Récupération des informations envoyées par l'application (login & mdp)
- * 2) Connection DB
- * 3) Récupération de la demande
- * 4) Retour
- *
+ * @param lat
+ * @param lng 
  */
 include("include/include.php");
 
-/* 3) Connection DB */
+/* Connection DB */
 $connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 
-/* 3) Récupération des demandes de l'utilisateur */
+/* Récupération des demandes associées à la position GPS */
 $lat = $_POST['lat'];
 $lng = $_POST['lng'];
 $sql_select_demande = "SELECT * FROM takeaphotoforme_demandes WHERE latitude = '$lat' AND longitude = '$lng'";
 $query_select_demande = $connexion->prepare($sql_select_demande);
 $query_select_demande->execute();
 
-//Construction json
+// Construction json
 $json = array();
 
 while($data=$query_select_demande->fetch(PDO::FETCH_OBJ)){
@@ -42,6 +35,6 @@ $result['result'] = "TRUE";
 $result['requete'] = $query_select_demande;
 $result['demande'] = $json;
 
-/* 4) Retour */
+/* Retour */
 print(json_encode($result));
 ?>

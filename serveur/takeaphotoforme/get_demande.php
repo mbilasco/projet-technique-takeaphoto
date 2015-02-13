@@ -1,29 +1,21 @@
 <?php
 /**
- * Renvoie le tableau des demandes d'un utilisateur
+ * Renvoie la demande associée à l'id
  *
- * @param login
- * @param pass 
  * @param id_demande
- *
- * 1) Récupération des informations envoyées par l'application (login & mdp)
- * 2) Connection DB
- * 3) Récupération de la demande
- * 4) Retour
- *
  */
 include("include/include.php");
 
-/* 3) Connection DB */
+/* Connection DB */
 $connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 
-/* 3) Récupération des demandes de l'utilisateur */
+/* Récupération de la demande associée à l'id */
 $id_demande = $_POST['id_demande'];
 $sql_select_demande = "SELECT * FROM takeaphotoforme_demandes WHERE id_demande = $id_demande";
 $query_select_demande = $connexion->prepare($sql_select_demande);
 $query_select_demande->execute();
 
-//Construction json
+// Construction json
 $json = array();
 
 while($data=$query_select_demande->fetch(PDO::FETCH_OBJ)){
@@ -40,6 +32,6 @@ while($data=$query_select_demande->fetch(PDO::FETCH_OBJ)){
 $result['result'] = "TRUE";
 $result['demande'] = $json;
 
-/* 4) Retour */
+/* Retour */
 print(json_encode($result));
 ?>
