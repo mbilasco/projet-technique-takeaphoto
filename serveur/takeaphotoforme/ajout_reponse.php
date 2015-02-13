@@ -1,14 +1,17 @@
 <?php
 /**
  * Ajout d'une reponse
+ * 
+ * @param url
+ * @param idDemande
  */
 include("include/include.php");
 
-/* 1) Récupération des informations envoyées par l'application */
+/* Récupération des informations envoyées par l'application */
 $url = $_POST['url'];
 $id_demande = $_POST['idDemande'];
 $json[] = array();
-/* 3) Connection DB */
+/* Connection DB */
 $connexion = new PDO('mysql:host='.$config['host'].';dbname='.$config['db'], $config['user'], $config['pass']);
 	
 if (!empty($url) && !empty($id_demande)){
@@ -16,7 +19,7 @@ if (!empty($url) && !empty($id_demande)){
 	$query_insert_reponse = $connexion->prepare($sql_insert_reponse);
 	$query_insert_reponse->execute();
 	if ($query_insert_reponse){
-		/* Recuperation info demande */
+		/* Recuperation info reponse */
 		$sql_select_data_reponse = "SELECT * FROM takeaphotoforme_reponses WHERE url = '".$url."' AND id_reponse = '".$id_reponse."'";
 		$query_select_date_reponse = $connexion->prepare($sql_select_data_reponse);
 		$query_select_date_reponse->execute();
@@ -43,6 +46,6 @@ else{
 	$result['message'] = "Erreur dans les paramètres.";
 }
 
-/* 7) result */
+/* result */
 print(json_encode($result));
 ?>
