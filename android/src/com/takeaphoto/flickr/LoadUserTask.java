@@ -29,13 +29,7 @@ public class LoadUserTask extends AsyncTask<OAuth, Void, User> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Log.i("LoadUserTask onPreExecute", "debut");
-        //mProgressDialog = new ProgressDialog(flickrjAndroidSampleActivity);
         mProgressDialog = ProgressDialog.show(flickrjAndroidSampleActivity,"", "Connexion en cours...", true);
-        //mProgressDialog.setCanceledOnTouchOutside(false);
-        //mProgressDialog.setCancelable(false);
-        
-        Log.i("LoadUserTask onPreExecute", "fin");
     }
 
     /* (non-Javadoc)
@@ -43,22 +37,17 @@ public class LoadUserTask extends AsyncTask<OAuth, Void, User> {
      */
     @Override
     protected User doInBackground(OAuth... params) {
-    		Log.i("LoadUserTask doInBackground", "debut");
-            OAuth oauth = params[0];
-            User user = oauth.getUser();
-            OAuthToken token = oauth.getToken();
-            try {
-            		Log.i("LoadUserTask doInBackground", "try");
-                    Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token.getOauthToken(), token.getOauthTokenSecret());
-                    Log.i("LoadUserTask doInBackground", "try before return");
-                    return f.getPeopleInterface().getInfo(user.getId());
-            } catch (Exception e) {
-            //        Toast.makeText(flickrjAndroidSampleActivity, e.toString(), Toast.LENGTH_LONG).show();
-                    logger.error(e.getLocalizedMessage(), e);
-            }
-            Log.i("LoadUserTask doInBackground", "fin");
-            
-            return null;
+        OAuth oauth = params[0];
+        User user = oauth.getUser();
+        OAuthToken token = oauth.getToken();
+        try {
+            Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token.getOauthToken(), token.getOauthTokenSecret());
+            return f.getPeopleInterface().getInfo(user.getId());
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage(), e);
+        }
+        
+        return null;
     }
 
     /* (non-Javadoc)
@@ -66,24 +55,9 @@ public class LoadUserTask extends AsyncTask<OAuth, Void, User> {
      */
     @Override
     protected void onPostExecute(User user) {
-    		Log.i("LoadUserTask onPostExecute", "debut");
-       /*
-    		if (FlickrActivity.mProgressDialog != null) {
-    			FlickrActivity.mProgressDialog.dismiss();
-            }*/
-    		mProgressDialog.dismiss();
-            if (user == null) {
-                    return;
-            }
-       /*     if (user.getBuddyIconUrl() != null) {
-                String buddyIconUrl = user.getBuddyIconUrl();
-                if (userIconImage != null) {
-                    ImageDownloadTask task = new ImageDownloadTask(userIconImage);
-                    Drawable drawable = new DownloadedDrawable(task);
-                    userIconImage.setImageDrawable(drawable);
-                    task.execute(buddyIconUrl);
-                }
-            }
-      */      Log.i("LoadUserTask onPostExecute", "fin");
+		mProgressDialog.dismiss();
+        if (user == null) {
+                return;
+        }
     }
 }

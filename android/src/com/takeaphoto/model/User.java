@@ -1,5 +1,10 @@
 package com.takeaphoto.model;
 
+/**
+ * Modèle pour un utilisateur
+ * @author Maxime & Jules
+ *
+ */
 public class User {
 	private String userId;
 	private String userName;

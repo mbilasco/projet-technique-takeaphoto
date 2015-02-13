@@ -2,6 +2,11 @@ package com.takeaphoto.model;
 
 import java.io.Serializable;
 
+/**
+ * Modèle pour une réponse
+ * @author Maxime & Jules
+ *
+ */
 public class Reponse implements Serializable {
 	private int id ;
 	private String url;

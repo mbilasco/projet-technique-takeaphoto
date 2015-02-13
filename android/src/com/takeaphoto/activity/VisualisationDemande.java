@@ -4,20 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.model.Marker;
 import com.googlecode.flickrjandroid.oauth.OAuth;
-import com.takeaphoto.flickr.GetPhotoInfoTask;
 import com.takeaphoto.flickr.OAuthTask;
 import com.takeaphoto.flickr.UploadPhotoFlickr;
-import com.takeaphoto.model.Demande;
-import com.takeaphoto.model.Reponse;
-import com.takeaphoto.model.User;
-import com.takeaphoto.server.DemandeServeur;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,17 +16,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+/**
+ * Fragment permettant de visualiser les détails d'une demande
+ * @author Maxime & Jules
+ *
+ */
 public class VisualisationDemande extends FragmentActivity {
 	static final int REQUEST_TAKE_PHOTO = 1;
-	
-	private String mCurrentPhotoPath;
 	
 	TextView latValue;
 	TextView lngValue;
@@ -69,6 +61,7 @@ public class VisualisationDemande extends FragmentActivity {
         lngValue.setText(lng);
         descValue.setText(desc);
      
+        // Action permettant à l'utilisateur de prendre la photo
         buttonTakePhoto.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
@@ -96,6 +89,9 @@ public class VisualisationDemande extends FragmentActivity {
 		}
 	}
 	
+	/**
+	 * Lancement activité pour prendre une photo
+	 */
 	private void dispatchTakePictureIntent() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    // Ensure that there's a camera activity to handle the intent
@@ -123,7 +119,7 @@ public class VisualisationDemande extends FragmentActivity {
 	    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 	    File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 	    // Save a file: path for use with ACTION_VIEW intents
-	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+	    String mCurrentPhotoPath = "file:" + image.getAbsolutePath();
 	    return image;
 	}
 }

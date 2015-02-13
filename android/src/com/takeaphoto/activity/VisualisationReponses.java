@@ -2,20 +2,14 @@ package com.takeaphoto.activity;
 
 import java.util.ArrayList;
 
-import org.apache.http.conn.ConnectTimeoutException;
-
-import com.takeaphoto.flickr.ImageCache;
 import com.takeaphoto.flickr.ImageDownloadTask;
-import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.Reponse;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
- 
-import android.app.ActionBar.LayoutParams;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +17,11 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
  
+/**
+ * Fragment permettant à l'utilisateur de visualiser toutes les photos d'une demande
+ * @author Maxime & Jules
+ *
+ */
 public class VisualisationReponses extends FragmentActivity {
     private ArrayList <Reponse> reponses;
     private User user;
@@ -38,9 +37,11 @@ public class VisualisationReponses extends FragmentActivity {
         id_demande = this.getIntent().getIntExtra("ID_DEMANDE", -1);
     }
     
+    /**
+     * Téléchargement de toutes les photos en miniatures et mise en disposition de celles-ci sur la vue
+     */
     public void onResume(){
     	super.onResume();
-    	Log.i("onResuuuuuuuuuuuuuuuuuuuuuume","onResuuuuuuuuuuuuuuuuuuuuuume");
     	reponses.clear();
     	
     	TableLayout tableLayout = (TableLayout) findViewById(R.id.table_reponses);
@@ -53,7 +54,6 @@ public class VisualisationReponses extends FragmentActivity {
     		demandeServeur.updateEtatDemande(id_demande, 0);
     	}
     	else{
-	        Log.i("reponses size",reponses.size()+"");
 	        TableRow tableRow = null;
 	        for(int i=0; i<reponses.size(); i++){
 	        	if(i%2==0){
@@ -95,7 +95,6 @@ public class VisualisationReponses extends FragmentActivity {
 					 }
 				});
 	            
-	
 	            tableRow.addView(imgView);
 	            if(i%2==0){
 	            	tableLayout.addView(tableRow);

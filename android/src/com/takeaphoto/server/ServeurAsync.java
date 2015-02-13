@@ -26,9 +26,12 @@ import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.Reponse;
 import com.takeaphoto.utils.MCrypt;
 
+/**
+ * AsyncTask pour effectuer les demandes au serveur
+ * @author Maxime
+ *
+ */
 class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
-
-    //public ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
 	private static HashMap<String, Object> resultArray = null;
 	private String nomFichier;
 	private ArrayList<String> args;
@@ -41,60 +44,49 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 
     protected String doInBackground(ArrayList<String>...params){
     	HttpClient client = new DefaultHttpClient();
-		Log.i("Ajout demande", "A");
 		HttpConnectionParams.setConnectionTimeout(client.getParams(), 20000);
 		HttpResponse response;
 		
-		// Cr�ation du tableau de donn�e a envoyer en POST
+		// Création du tableau de données à envoyer en POST
 		List<NameValuePair> postdata = new ArrayList<NameValuePair>();
-		Log.i("Ajout demande", "B");
 		try {
 			// On traite les arguments
 			args = params[0] ;
 			nomFichier = args.get(0) ;
-			Log.i("Ajout demande", args.get(0));
 			String URL = "http://jules-vanneste.fr/takeaphotoforme/" + nomFichier;
-			Log.i("Ajout demande", "C");
 			for (int i = 1; i < args.size(); i++) {
 				String key = args.get(i).substring(0, args.get(i).indexOf("="));
 				String value = args.get(i).substring(args.get(i).indexOf("=") + 1, args.get(i).length());
 				System.out.println("key = " + key + " value = " + value);
 				postdata.add(new BasicNameValuePair(key, value));
 			}
-			Log.i("Ajout demande", "D");
 
-			// On envoit les donn�es en POST au serveur
+			// On envoit les données en POST au serveur
 			HttpPost post = new HttpPost(URL);
 			post.setEntity(new UrlEncodedFormEntity(postdata));
 			response = client.execute(post);
 			System.out.println("client excute poste => " + response);
-			Log.i("Ajout demande", "E");
 			
-			// On pr�pare la r�ception de la r�ponse du serveur
+			// On prépare la réponse du serveur
 			InputStream inputStream = response.getEntity().getContent();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
 			StringBuilder sb = new StringBuilder();
 			String line = null;
-			Log.i("Ajout demande", "F");
 			while ((line = reader.readLine()) != null){
 				System.out.println("line = " + line);
 				sb.append(line + "\n");
 			}
-			Log.i("Ajout demande", "G");
 			
-			// On r�cup�re la r�ponse
+			// On récupère la réponse
 			response.getEntity().consumeContent();
 			String json = sb.toString();
-			Log.i("Ajout demande", "H");
 			System.out.println("json = " + json);
 			JSONObject jsonObj = new JSONObject(json.substring(json.indexOf("{"), json.lastIndexOf("}") + 1));
-			Log.i("Ajout demande", "I");
 			// On verifie si il n'y a pas d'erreur
 			String result = jsonObj.getString("result");
-						
-			Log.i("Ajout demande", "J");
+			
 			if (result.contains("TRUE")) {
-				// Pour les demandes ont va remplir le tableau resultArray
+				// Pour les demandes on va remplir le tableau resultArray
 				if (nomFichier.equals("my_demandes.php") || nomFichier.equals("get_demandes_with_latlng.php") || nomFichier.equals("get_demandes_except_user.php") || nomFichier.equals("get_demande.php")) {
 					remplirResultArray("demande", jsonObj);
 				} else if (nomFichier.equals("get_photos.php")) {
@@ -109,29 +101,22 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 					remplirResultArray("reponses", jsonObj);
 				}
 				else{
-					Log.i("Ajout demande", "K");
 					addInResultArray("id", jsonObj.getString("id"));
 				}
 			} else {
-				Log.i("Ajout demande", "L");
 				addInResultArray("message", jsonObj.getString("message"));
 			}
-			Log.i("Ajout demande", "M");
 			serveur.setResult(resultArray);
-			Log.i("Ajout demande", "N");
 			serveur.setRunning(false);
-			Log.i("Ajout demande", "O");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			// showDialog("Error", "Cannot Estabilish Connection");
 		}
 		
 		return "";
     }
     
     protected void onPostExecute(String s) {
-       // this.progressDialog.dismiss();
         Log.i("onPostExecute", s);
     }
     
@@ -140,8 +125,7 @@ class ServeurAsync extends AsyncTask<ArrayList<String>, Void, String> {
 		resultArray.put(key, value);
 	}
     
-    private void remplirResultArray(String key, JSONObject jsonObj)
-			throws JSONException {
+    private void remplirResultArray(String key, JSONObject jsonObj)	throws JSONException {
     	JSONArray jArray =null ;
     	
     	if(jsonObj.getJSONArray(key) != null)

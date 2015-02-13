@@ -44,11 +44,6 @@ public class GetPhotoInfoTask extends AsyncTask<String,Integer, String> {
 			
 			PhotosInterface photoInt = new PhotosInterface(FlickrHelper.API_KEY, FlickrHelper.API_SEC, rest);
 			photo = photoInt.getPhoto(photoId);
-        	
-    		Log.i("Get Photo", photo.toString());
-    		Log.i("Get Photo", "GET PHOTO EFFECTUE");
-			
-			Log.i("Get Photo Info Task", "Get Photo Info Task finish");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

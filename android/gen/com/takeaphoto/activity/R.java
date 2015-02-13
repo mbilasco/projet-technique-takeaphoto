@@ -46,7 +46,6 @@ public final class R {
         public static final int vert=0x7f02000f;
     }
     public static final class id {
-        public static final int action_settings=0x7f090015;
         public static final int button_accepter=0x7f090006;
         public static final int button_refuser=0x7f090005;
         public static final int button_take_photo=0x7f09000e;
@@ -58,7 +57,7 @@ public final class R {
         public static final int loadingSignIn=0x7f090002;
         public static final int longitude_value=0x7f09000b;
         public static final int map=0x7f090004;
-        public static final int menu_save=0x7f090016;
+        public static final int menu_save=0x7f090015;
         public static final int menu_settings=0x7f090014;
         public static final int photosViewPager=0x7f090003;
         public static final int scrollView1=0x7f09000f;
@@ -82,8 +81,7 @@ public final class R {
     }
     public static final class menu {
         public static final int login=0x7f080000;
-        public static final int main=0x7f080001;
-        public static final int map_add=0x7f080002;
+        public static final int map_add=0x7f080001;
     }
     public static final class string {
         public static final int action_settings=0x7f060013;

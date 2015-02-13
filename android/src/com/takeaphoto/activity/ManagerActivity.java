@@ -1,12 +1,5 @@
 package com.takeaphoto.activity;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,18 +8,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -36,21 +24,20 @@ import com.takeaphoto.model.Reponse;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 
+/**
+ * Fragment permettant la gestion des demandes 
+ * @author Maxime & Jules
+ *
+ */
 public class ManagerActivity extends ListFragment {
 	private ArrayList<Demande> demandes;
 	private User user;
-	private ArrayList<Bitmap> photos = null;
-	private int nbPhotosCurrent, nbPhotos;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		setHasOptionsMenu(true);
-/*
-		if (demandes == null) {
-			updateDemandes();
-		}
-*/	}
+	}
 	
 	@Override
 	public void onResume() {
@@ -63,22 +50,19 @@ public class ManagerActivity extends ListFragment {
 	}
 
 	private void updateDemandes() {
-		Log.i("manager", user.getUserId());
 		if (this.user != null) {
-			new DemandeServeur().updateMyDemandesLocal(getActivity(), this.user);
+			new DemandeServeur().getMyDemandes(getActivity(), this.user);
 			actualiserListeDemande();
 		} else
 			setListAdapter(null);
 	}
 
+	/**
+	 * Mise à jour des demandes & construction de l'adapter pour la vue
+	 */
 	public void actualiserListeDemande() {
 		if (this.user != null) {
-			//demandes = new DemandeServeur().getMyDemandesLocal(getActivity(), this.user);
-			
-			if (demandes != null) {
-				// Each row in the list stores country name, currency and flag
-				Log.i("actu", demandes.size()+"");
-				
+			if (demandes != null) {				
 				List<HashMap<String, String>> aList = new ArrayList<HashMap<String, String>>();
 
 				String[] Descriptions = new String[demandes.size()];
@@ -127,23 +111,18 @@ public class ManagerActivity extends ListFragment {
 			setListAdapter(null);
 	}
 
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		// inflater.inflate(R.menu.refresh, menu) ;
-		inflater.inflate(R.menu.main, menu);
-	}
-
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		// case R.id.menu_refresh :
-		case R.id.menu_save:
-			updateDemandes();
-			break;
+			case R.id.menu_save:
+				updateDemandes();
+				break;
 		}
 		return true;
 	}
 
-	@Override
+	/**
+	 * Action lors d'un click sur l'item de la list de l'adapter
+	 */
 	public void onListItemClick(ListView l, View v, final int position, long id) {
 		final int id_demande = demandes.get(position).getId();
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -170,8 +149,6 @@ public class ManagerActivity extends ListFragment {
 
 			alert.show();
 		} else {
-		//	ArrayList<Object> result = new PhotoServeur().getUrls(this.user,id_demande);
-			
 			DemandeServeur demandeServeur = new DemandeServeur();
 			ArrayList<Reponse> result = demandeServeur.getURLPhotoReponse(id_demande);
 						
@@ -179,134 +156,16 @@ public class ManagerActivity extends ListFragment {
 				Intent intent = new Intent(getActivity(), VisualisationReponses.class);
 				intent.putExtra("REPONSES", result);
 				intent.putExtra("ID_DEMANDE", result.get(0).getId_demande());
-/*
-				intent.putExtra("URL_PHOTO", result.get(0).getUrl());
-				intent.putExtra("ID_DEMANDE", result.get(0).getId_demande());
-*/				
+		
 				startActivity(intent);
 			}
 		}
 	}
 	
-	public class getPhoto extends AsyncTask<String, Integer, Bitmap> {
-		volatile int id_demande;
-		
-		@Override
-		protected Bitmap doInBackground(String... args) {
-			id_demande = Integer.parseInt(args[0]);
-			String url = args[1];
-			Bitmap bmp = null;
-
-			try {
-				URLConnection conn = null;
-				URL u = new URL(url);
-				conn = u.openConnection();
-				HttpURLConnection httpConn = (HttpURLConnection) conn;
-				httpConn.setRequestMethod("GET");
-				httpConn.connect();
-				InputStream is = null;
-				if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-					is = httpConn.getInputStream();
-					int thisLine;
-					ByteArrayOutputStream bos = new ByteArrayOutputStream();
-					while ((thisLine = is.read()) != -1) {
-						bos.write(thisLine);
-					}
-					bos.flush();
-					byte[] data = bos.toByteArray();
-
-					if (bos != null) {
-						bos.close();
-					}
-					bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-					return bmp;
-				}
-				httpConn.disconnect();
-
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			return bmp;
-		}
-
-		protected void onPostExecute(Bitmap bmp) {
-			photos.add(bmp);
-			nbPhotosCurrent++;
-			if (nbPhotos == nbPhotosCurrent) {
-				nbPhotosCurrent = 0;
-				afficherPhotos(id_demande);
-			}
-		}
-	}
-
-	private void afficherPhotos(final int id_demande) {
-		if (photos != null && nbPhotosCurrent < nbPhotos) {
-			AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-			ImageView iv = new ImageView(getActivity());
-			iv.setImageBitmap(photos.get(nbPhotosCurrent));
-			alert.setView(iv);
-			alert.setTitle("photo " + (nbPhotosCurrent + 1) + "/" + nbPhotos);
-
-			if (nbPhotosCurrent < nbPhotos - 1) {
-				alert.setPositiveButton("Suivant", new OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						nbPhotosCurrent++;
-						afficherPhotos(id_demande);
-					}
-				});
-			}
-
-			alert.setNegativeButton("Ok", new OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					photos = null;
-					nbPhotos = 0;
-					nbPhotosCurrent = 0;
-					afficherPhotos(id_demande);
-				}
-			});
-
-			alert.show();
-		} else {
-			choixEtat(id_demande);
-		}	
-	}
-
-	private void choixEtat(final int id_demande) {
-		Demande demande = null;
-		
-		for(int i=0; i<demandes.size(); i++){
-			if(demandes.get(i).getId()==id_demande){
-				demande=demandes.get(i);
-			}
-		}
-		if(demande!=null){
-			if (demande.getEtat() == 1) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-				ImageView iv = new ImageView(getActivity());
-				alert.setView(iv);
-				alert.setTitle("Voulez-vous d'autres photos pour cette demande ?");
-	
-				alert.setPositiveButton("Oui", new OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-	
-					}
-				});
-	
-				alert.setNegativeButton("Non", new OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						new DemandeServeur().updateDemande(getActivity(), user,	id_demande, "etat", "2");
-						actualiserListeDemande();
-					}
-				});
-	
-				alert.show();
-			}
-		}
-	}
-
+	/**
+	 * Methode pour modifier une demande
+	 * @param position
+	 */
 	private void renomerDemande(final int position) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
@@ -320,15 +179,11 @@ public class ManagerActivity extends ListFragment {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String desc = input.getText().toString();
 				demandes.get(position).setDescription(desc);
-				String result = new DemandeServeur().updateDemande(
-						getActivity(), user, demandes.get(position).getId(),
-						"description", desc);
+				String result = new DemandeServeur().updateDemande(getActivity(), user, demandes.get(position).getId(),	"description", desc);
 				if (result != null)
-					Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 				else
-					Toast.makeText(getActivity(), R.string.erreur_connextion,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.erreur_connextion,Toast.LENGTH_SHORT).show();
 
 				actualiserListeDemande();
 			}
@@ -340,6 +195,10 @@ public class ManagerActivity extends ListFragment {
 		alert.show();
 	}
 
+	/**
+	 * Methode pour supprimer une demande
+	 * @param id_demande
+	 */
 	private void supprimerDemande(final int id_demande) {
 		String result = new DemandeServeur().removeDemande(getActivity(), this.user, id_demande);
 

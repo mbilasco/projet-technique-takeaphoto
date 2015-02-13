@@ -35,8 +35,6 @@ public class UploadPhotoFlickr extends AsyncTask<String,Integer,String> {
 	@Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Log.i("onPreExecute","onPreExecute");
-        //mProgressDialog = new  ProgressDialog.show(this.mContext,"", "Envoi de la photo en cours...", true);
         mProgressDialog = new ProgressDialog(this.mContext);
         mProgressDialog.setMessage("Envoi de la photo en cours...");
         mProgressDialog.show();
@@ -44,7 +42,6 @@ public class UploadPhotoFlickr extends AsyncTask<String,Integer,String> {
 
 	@Override
 	protected String doInBackground(String... params) {
-		Log.i("doInBackground","doInBackground");
 		String result = new String("debut upload");
 		RequestContext.getRequestContext().setOAuth(oauth);
 		try {
@@ -65,9 +62,6 @@ public class UploadPhotoFlickr extends AsyncTask<String,Integer,String> {
         	metaData.setContentType("ma photo");
         	
     		result = uploader.upload(photoFile.getName(), f, metaData);
-   
-    		Log.i("upload", result);
-    		Log.i("upload", "UPLOAD EFFECTUE");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,7 +71,6 @@ public class UploadPhotoFlickr extends AsyncTask<String,Integer,String> {
 	
 	protected void onPostExecute(String result){
 		super.onPostExecute(result);
-		Log.i("onPostExecute","onPostExecute");
 		
 		GetPhotoInfoTask getInfoTask = new GetPhotoInfoTask(oauth, result, lat, lng);
 		getInfoTask.execute();

@@ -35,29 +35,7 @@ public class LazyAdapter extends BaseAdapter {
    
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        /**
-       if(convertView == null)
-	   	vi = inflater.inflate(R.layout.sample_adapter, null);
-       
-        TextView text=(TextView)vi.findViewById(R.id.imageTitle);;
-        ImageView image=(ImageView)vi.findViewById(R.id.imageIcon);
-        Photo photo = photos.get(position);
-        text.setText(photo.getTitle());
-        if (image != null) {
-                ImageDownloadTask task = new ImageDownloadTask(image);
-            Drawable drawable = new DownloadedDrawable(task);
-            image.setImageDrawable(drawable);
-            task.execute(photo.getSmallSquareUrl());
-        }
-       
-        ImageView viewIcon = (ImageView)vi.findViewById(R.id.viewIcon);
-        if (photo.getViews() >= 0) {
-       //         viewIcon.setImageResource(R.drawable.views);
-                TextView viewsText = (TextView)vi.findViewById(R.id.viewsText);
-                viewsText.setText(String.valueOf(photo.getViews()));
-        } else {
-                viewIcon.setImageBitmap(null);
-        }*/
+
         return vi;
     }
 }

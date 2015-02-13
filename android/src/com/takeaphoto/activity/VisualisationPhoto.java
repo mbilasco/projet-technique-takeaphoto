@@ -1,6 +1,5 @@
 package com.takeaphoto.activity;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,15 +21,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
-import android.provider.MediaStore.Images.Media;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
- 
+
+/**
+ * Fragment permettant à l'utilisateur de visualiser une photo
+ * @author Maxime & Jules
+ *
+ */
 public class VisualisationPhoto extends FragmentActivity {
     private ImageView photo;
     
@@ -55,6 +57,7 @@ public class VisualisationPhoto extends FragmentActivity {
         enregistrer = (Button) findViewById(R.id.button_accepter);
         rejetter = (Button) findViewById(R.id.button_refuser);
         
+        // Action pour enregistrer une photo sur son téléphone
         enregistrer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {            	
@@ -83,6 +86,7 @@ public class VisualisationPhoto extends FragmentActivity {
             }
         });   
         
+        // Action pour rejetter une photo prise par un autre utilisateur
         rejetter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,11 +165,7 @@ public class VisualisationPhoto extends FragmentActivity {
 
 		matrix.setScale(scaleX, scaleY);
 
-		Bitmap thumb = Bitmap.createBitmap(source, 0, 0,
-				source.getWidth(),
-				source.getHeight(), matrix,
-				true
-				);
+		Bitmap thumb = Bitmap.createBitmap(source, 0, 0,source.getWidth(),source.getHeight(),matrix,true);
 
 		ContentValues values = new ContentValues(4);
 		values.put(Images.Thumbnails.KIND,kind);

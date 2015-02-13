@@ -28,10 +28,14 @@ import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 import com.takeaphoto.server.DemandeServeur;
 
+/**
+ * Fragment permettant d'ajouter et visualiser ses demandes par des markers sur une map 
+ * @author Maxime & Jules
+ *
+ */
 public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 	private GoogleMap gMap;
 	private MarkerOptions ajoutMarker;
-	private ArrayList<MarkerOptions> mesMarker;
 	private Activity mainActivity;
 	private User user;
 	private ArrayList<Demande> demandes;
@@ -55,6 +59,9 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 		this.user = user;
 	}
 
+	/**
+	 * Ajout des demandes représentés par des markers sur la map
+	 */
 	private void setMarkerDemandes() {
 		MarkerOptions m = new MarkerOptions();
 		
@@ -80,6 +87,10 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 		}
 	}
 	
+	/**
+	 * Ajout d'un marker lors de l'ajout d'une demande
+	 * @param result
+	 */
 	private void setMarker(String result) {
 		ajoutMarker.title("Demande non validée");
 		ajoutMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
@@ -157,7 +168,7 @@ public class MapAdd extends SupportMapFragment implements OnMarkerDragListener {
 								Demande demande = new Demande(user.getUserId(),	ajoutMarker.getPosition().latitude, ajoutMarker.getPosition().longitude, ajoutMarker.getSnippet());
 								
 								DemandeServeur demandeServeur = new DemandeServeur();
-
+	
 								demandeServeur.addDemande(user, demande);
 								demandes.add(demande);
 								

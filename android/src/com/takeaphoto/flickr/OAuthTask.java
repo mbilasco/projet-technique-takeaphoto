@@ -54,7 +54,6 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
         @Override
         protected void onPreExecute() {
                 super.onPreExecute();
-                Log.i("onPreExecute", "on Pre Execute");
                 mProgressDialog = ProgressDialog.show(mContext, "", "Generating the authorization request..."); //$NON-NLS-1$ //$NON-NLS-2$
                 mProgressDialog.setCanceledOnTouchOutside(true);
                 mProgressDialog.setCancelable(true);
@@ -101,18 +100,13 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 
         @Override
         protected void onPostExecute(String result) {
-        		Log.i("onpostexecute", "on post execute");
                 if (mProgressDialog != null) {
-                		Log.i("onpostexecute", "dismiss");
-                        mProgressDialog.dismiss();
+                    mProgressDialog.dismiss();
                 }
                 if (result != null && !result.startsWith("error") ) { //$NON-NLS-1$
-                		Log.i("onpostexecute", "result > " + Uri.parse(result));
-                        mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(result)));
-                        Log.i("onpostexecute", "after result null or error");
+                    mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(result)));
                 } else {
-                	Log.i("onpostexecute", "toast");
-                        Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
                 }
         }
 

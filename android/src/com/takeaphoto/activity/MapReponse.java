@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,11 @@ import com.googlecode.flickrjandroid.oauth.OAuth;
 import com.takeaphoto.model.Demande;
 import com.takeaphoto.model.User;
 
+/**
+ * Fragment permettant de visualiser les demandes des autres utilisateurs sur une map et d'y répondre en prenant des phtoso 
+ * @author Maxime & Jules
+ *
+ */
 public class MapReponse extends SupportMapFragment {
 	private ArrayList<MarkerOptions> markers;
 	private Activity mainActivity;
@@ -38,8 +42,7 @@ public class MapReponse extends SupportMapFragment {
 	}
 
 	public void initialize(Activity main, User user) {
-		this.setMainActivity(main);
-		
+		this.setMainActivity(main);	
 	}
 
 	public void setMainActivity(Activity main) {
@@ -49,8 +52,6 @@ public class MapReponse extends SupportMapFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.i("Upload","MapReponse onResume");
-
 		setUpMapIfNeeded();
 		updateMap();
 	}
@@ -64,6 +65,7 @@ public class MapReponse extends SupportMapFragment {
 	        gMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 	        gMap.animateCamera(CameraUpdateFactory.zoomTo(2));
 		}
+		// Lors d'un click sur le marker, lancement activité du résumé de la demande pour ensuite prendre la photo
 		gMap.setOnMarkerClickListener(new OnMarkerClickListener(){
 			public boolean onMarkerClick(Marker marker) {				
 				Intent intent = new Intent(mainActivity.getApplicationContext(), VisualisationDemande.class);
@@ -78,6 +80,9 @@ public class MapReponse extends SupportMapFragment {
 		});
 	}
 	
+	/**
+	 * Ajout des demandes des autres utilisateur sur la map
+	 */
 	private void updateMap() {
 		for (Demande d : demandes) {
 			MarkerOptions m = new MarkerOptions();

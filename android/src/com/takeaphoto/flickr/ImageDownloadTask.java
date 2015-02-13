@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.widget.ImageView;
 
 public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
-    //private static final Logger logger = LoggerFactory.getLogger(ImageDownloadTask.class);
     private WeakReference<ImageView> imgRef = null;
     private String mUrl;
 
