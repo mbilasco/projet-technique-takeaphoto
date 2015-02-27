@@ -2,13 +2,13 @@
 -- version 4.1.9
 -- http://www.phpmyadmin.net
 --
--- Client :  julesvanteam.mysql.db
--- Généré le :  Jeu 12 Février 2015 à 11:07
+-- Généré le :  Ven 27 Février 2015 à 16:39
 -- Version du serveur :  5.1.73-2+squeeze+build1+1-log
 -- Version de PHP :  5.3.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,7 +16,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de données :  `julesvanteam`
+-- Base de données :  `takeaphotoforme`
 --
 
 -- --------------------------------------------------------
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `takeaphotoforme_demandes` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_demande`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=165 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=178 ;
 
 -- --------------------------------------------------------
 
@@ -50,7 +50,22 @@ CREATE TABLE IF NOT EXISTS `takeaphotoforme_reponses` (
   PRIMARY KEY (`id_reponse`),
   KEY `id_demande` (`id_demande`),
   KEY `id_demande_2` (`id_demande`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=65 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `takeaphotoforme_users`
+--
+
+CREATE TABLE IF NOT EXISTS `takeaphotoforme_users` (
+  `id_user` int(11) NOT NULL AUTO_INCREMENT,
+  `login` varchar(40) NOT NULL,
+  `password` text NOT NULL,
+  `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_user`),
+  UNIQUE KEY `login` (`login`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
