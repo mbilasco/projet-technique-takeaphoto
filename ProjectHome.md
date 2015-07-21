@@ -1,0 +1,2 @@
+Projet technique de Master 2 qui continue le travail réalisé par un étudiant en 2012.
+Le but du projet est une application qui permettra à une communauté d'utilisateurs d'exprimer leur besoin "ultime" de disposer des photos d'un certain endroit identifié par ses coordonnées GPS + orientation. Les membres de cette communauté seront invités à prendre cette photo dès qu'ils sont à proximité d'un endroit pour lequel une telle demande a été faite, ou bien alors, les passionnés feront la chasse à des endroits demandés près de chez eux.
